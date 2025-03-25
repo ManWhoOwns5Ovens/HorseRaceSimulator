@@ -16,20 +16,7 @@ public class Race
     private Horse lane2Horse;
     private Horse lane3Horse;
 
-    /**
-     * Generic method for collecting user input as a string
-     * 
-     * @param message message requesting input
-     */
-    public static String inputString(String message){
-        Scanner s= new Scanner(System.in);
-        System.out.println(message);
-        return s.nextLine();
-    }
 
-    public static double roundTo(double val, double dp){
-        return ((int)(val*dp))/dp;
-    }
     /**
      * Constructor for objects of class Race
      * Initially there are no horses in the lanes
@@ -101,11 +88,10 @@ public class Race
             for(int i=0; i<horseArr.length;i++){
                 if(raceWonBy(horseArr[i])){ //check every land at the end of a state
                     winners.add(horseArr[i]);
-                    updateHorseConfidence(horseArr[i], true);
                 }
             }
 
-            //if there are winners
+            //if race has ended (there are winners, or all horses have fallen)
             if(!winners.isEmpty() || !canRaceContinue(horseArr)){
                 printWinners(winners);
                 if(inputString("Would you like to run another race?(y/n)").equals("y")){
@@ -134,7 +120,7 @@ public class Race
      */
     private void printWinners(ArrayList<Horse> winners){
         if(winners.size()>=2){
-            System.out.println("It's a tie between ");
+            System.out.print("\n It's a tie between ");
             for(int i=0; i<winners.size();i++){
                 if(i!=0){System.out.print(" AND ");}// add AND in front if not the first horse
                 System.out.print(winners.get(i).getName());
@@ -171,7 +157,6 @@ public class Race
             if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence()))
             {
                 theHorse.fall();
-                updateHorseConfidence(theHorse, false);
             }
         }
     }
@@ -305,21 +290,17 @@ public class Race
         }
     }
 
-    /***
-     * Changes the horse's confidence(for the next race), increasing it if it won, decreasing it if it had fallen
+        /**
+     * Generic method for collecting user input as a string
      * 
-     * @param horse horse to have its confidence changed
-     * @param isIncrease true- confidence will increase, false- confidence will decrease
+     * @param message message requesting input
      */
-    private void updateHorseConfidence(Horse horse, boolean isIncrease){
-        final double MODIFIER= 0.1;
-        if(isIncrease){
-            horse.setConfidence(roundTo(horse.getConfidence()+MODIFIER,10.0));
-        }
-        else{
-            horse.setConfidence(roundTo(horse.getConfidence()-MODIFIER,10.0));
-        }
+    public static String inputString(String message){
+        Scanner s= new Scanner(System.in);
+        System.out.println(message);
+        return s.nextLine();
     }
+
 
     
 }
