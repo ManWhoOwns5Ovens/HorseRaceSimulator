@@ -127,7 +127,7 @@ public class Race
                     finished=true;
                 }
             }
-        }
+        
             
             
             //wait for 300 milliseconds between "frames"
