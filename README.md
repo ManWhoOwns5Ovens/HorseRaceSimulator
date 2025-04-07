@@ -3,8 +3,8 @@ Part 1:
 - To run Part 1
 - (1) Open a terminal e.g. the Windows cmd
 - (2) Run the following commands:
-- javac Test.java
-- java Test
+- javac Race.java
+- java Race
 - (3) If certain characters are displayed as "?" follow the next steps
 - (4) Navigate to "Language Settings"
 - (5) Access "Administrative Language Settings"

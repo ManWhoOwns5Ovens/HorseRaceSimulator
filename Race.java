@@ -17,6 +17,15 @@ public class Race
     private Horse lane3Horse;
 
 
+    public static void main(String[] a){
+        Race race= new Race(10);
+        race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6), 1);
+        race.addHorse(new Horse('♞', "KOKOMO", 0.5), 2);
+        race.addHorse(new Horse('♛', "EL JEFE", 0.4), 3);
+
+        race.startRace();
+    }
+    
     /**
      * Constructor for objects of class Race
      * Initially there are no horses in the lanes
@@ -31,6 +40,8 @@ public class Race
         lane2Horse = null;
         lane3Horse = null;
     }
+
+ 
     
     /**
      * Adds a horse to the race in a given lane
