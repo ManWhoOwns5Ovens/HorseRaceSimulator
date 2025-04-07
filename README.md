@@ -10,4 +10,4 @@ Part 1:
 - (5) Access "Administrative Language Settings"
 - (6) Click on "Change System Locale" (will require admin permissions)
 - (7) Tick "Beta: Use Unicode UTF-8"
-- (8) Restart your computer
+- (8) Restart your computer and proceed with steps (1) and (2) again

@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class Race
 {
     private int raceLength;
+    private int laneCount;
     private Horse lane1Horse;
     private Horse lane2Horse;
     private Horse lane3Horse;
@@ -36,12 +37,21 @@ public class Race
     {
         // initialise instance variables
         raceLength = distance;
+        laneCount=3; 
         lane1Horse = null;
         lane2Horse = null;
         lane3Horse = null;
     }
 
- 
+    private void setLaneCount(int newLaneCount){
+        if(newLaneCount<3){
+            this.laneCount=3;
+        }
+        else{
+            this.laneCount=newLaneCount;
+        }
+        
+    }
     
     /**
      * Adds a horse to the race in a given lane
@@ -71,9 +81,8 @@ public class Race
     
     /**
      * Start the race
-     * The horse are brought to the start and
-     * then repeatedly moved forward until the 
-     * race is finished
+     * The horses are brought to the start and then repeatedly moved forward until the race is finished.
+     * 
      */
     public void startRace()
     {
@@ -84,6 +93,8 @@ public class Race
         ArrayList<Horse> winners=new ArrayList<>();//number of horses in a tie can differ
             
         resetHorses(horseArr);
+
+        adjustLaneCount(); //ask user how many lanes they want
 
         while (!finished)
         {
@@ -99,20 +110,24 @@ public class Race
             for(int i=0; i<horseArr.length;i++){
                 if(raceWonBy(horseArr[i])){ //check every land at the end of a state
                     winners.add(horseArr[i]);
+                    updateHorseConfidence(horseArr[i], true);//increase confidence of winner
                 }
             }
 
             //if race has ended (there are winners, or all horses have fallen)
             if(!winners.isEmpty() || !canRaceContinue(horseArr)){
                 printWinners(winners);
-                if(inputString("Would you like to run another race?(y/n)").equals("y")){
+
+                if(input("Would you like to run another race?(y/n)").equals("y")){
                     resetHorses(horseArr);
                     winners.clear();
+                    adjustLaneCount();
                 }
                 else{
                     finished=true;
                 }
             }
+        }
             
             
             //wait for 300 milliseconds between "frames"
@@ -140,7 +155,6 @@ public class Race
         else if(winners.size()==1){
             System.out.println("And the winner is... "+winners.get(0).getName()+"!");//Prints race winner;
         }
-        return;
     }
     
     /**
@@ -168,6 +182,7 @@ public class Race
             if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence()))
             {
                 theHorse.fall();
+                updateHorseConfidence(theHorse, false);
             }
         }
     }
@@ -209,6 +224,11 @@ public class Race
         
         printLane(lane3Horse);
         System.out.println();
+
+        for(int i=0; i<laneCount-3;i++){
+            printLane(null);
+            System.out.println();
+        }
         
         multiplePrint('=',raceLength+3); //bottom edge of track
         System.out.println();    
@@ -222,6 +242,14 @@ public class Race
      */
     private void printLane(Horse theHorse)
     {
+        if(theHorse == null)
+        {
+            System.out.print('|');
+            multiplePrint(' ',raceLength);
+            System.out.print('|');
+            return; 
+        }
+
         //calculate how many spaces are needed before
         //and after the horse
         int spacesBefore = theHorse.getDistanceTravelled();
@@ -301,18 +329,61 @@ public class Race
         }
     }
 
-        /**
+    /**
+     * Method for setting number of lanes based on user input
+     * 
+     */
+    private void adjustLaneCount(){
+        boolean validInput=false;
+        while(!validInput){
+            try{
+                int newLaneCount=Integer.parseInt(input("How many lanes would you like? (3 or more)"));
+                setLaneCount(newLaneCount);
+                validInput=true;
+            }
+            catch (NumberFormatException e){
+                System.out.println("Invalid input. Please try again.");
+            }
+        }
+        
+    }
+
+    /**
+     * Modify a horse's confidence rating
+     * 
+     * @param theHorse horse object to have its confidence modified
+     * @param isIncrease true if the confidence is to be increased, false if it is to be decreased
+     */
+    private void updateHorseConfidence(Horse theHorse, boolean isIncrease){
+        final double MODIFIFER=0.1;
+        if(isIncrease){
+            theHorse.setConfidence(roundDouble((theHorse.getConfidence()+MODIFIFER),1));
+        }
+        else{
+            theHorse.setConfidence(roundDouble((theHorse.getConfidence()-MODIFIFER),1));
+        }
+    }
+
+    /**
+     * Rounds double to a given number of decimal places
+     * 
+     * @param number the number to be rounded
+     * @param dp the number of decimal places to round to
+     */
+    private double roundDouble(double number, int dp){
+        double factor=Math.pow(10, dp);
+        return (double)(((int)(number*factor))/factor);
+    }
+
+    /**
      * Generic method for collecting user input as a string
      * 
      * @param message message requesting input
      */
-    public static String inputString(String message){
+    public static String input(String message){
         Scanner s= new Scanner(System.in);
         System.out.println(message);
         return s.nextLine();
-    }
-
-
-    
+    }    
 }
 
