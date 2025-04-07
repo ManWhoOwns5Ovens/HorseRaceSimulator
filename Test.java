@@ -8,5 +8,3 @@ public class Test{
         race.startRace();
     }
 }
-
-

@@ -104,7 +104,7 @@ public class Race
             }
             
             
-            //wait for 300 milliseconds
+            //wait for 300 milliseconds between "frames"
             try{ 
                 TimeUnit.MILLISECONDS.sleep(300);
             }catch(Exception e){}
