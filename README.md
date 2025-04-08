@@ -1,10 +1,11 @@
 Part 1:
 - Part 1 is an incomplete version of the simulator containing no GUI and just the simplest features
-- To run Part 1
-- (1) Open a terminal e.g. the Windows cmd
+- To run Part 1:
+- (1) Open a terminal e.g. the Windows cmd, Powershell, Git Bash
 - (2) Run the following commands:
 - javac App.java
 - java App
+
 - (3) If certain characters are displayed as "?" follow the next steps
 - (4) Navigate to "Language Settings"
 - (5) Access "Administrative Language Settings"
