@@ -25,7 +25,7 @@ public class Race
     public Race(int distance)
     {
         // initialise instance variables
-        raceLength = distance;
+        setRaceLength(distance);
         laneCount=3; 
         lane1Horse = null;
         lane2Horse = null;
@@ -83,7 +83,7 @@ public class Race
             
         resetHorses(horseArr);
 
-        adjustLaneCount(); //ask user how many lanes they want
+        setLaneCount(App.adjustRaceSetting("How many lanes would you like? (3 or more)")); //ask user how many lanes they want
 
         while (!finished)
         {
@@ -266,7 +266,6 @@ public class Race
     /**
     * Checks if the race can continue on by checking if the horses are in a condition to continue.
     *
-    *
     *@param horses contains refrences to all horse objects
      */
     private boolean canRaceContinue(Horse[] horses){
@@ -312,22 +311,20 @@ public class Race
     }
 
     /**
-     * Method for setting number of lanes based on user input
+     * Mutator with validation for the race length
      * 
+     * @param raceLength user input for the race length
      */
-    private void adjustLaneCount(){
-        boolean validInput=false;
-        while(!validInput){
-            try{
-                int newLaneCount=Integer.parseInt(App.input("How many lanes would you like? (3 or more)"));
-                setLaneCount(newLaneCount);
-                validInput=true;
-            }
-            catch (NumberFormatException e){
-                System.out.println("Invalid input. Please try again.");
-            }
+    public final void setRaceLength(int raceLength){
+        final int MINIMUM_LENGTH=3; //min. length of race
+        final int DEFAULT_LENGTH=10; //ideal and recommended race length
+
+        if(raceLength<MINIMUM_LENGTH){
+            this.raceLength=DEFAULT_LENGTH;
         }
-        
+        else{
+            this.raceLength=raceLength;
+        }
     }
 
     /**

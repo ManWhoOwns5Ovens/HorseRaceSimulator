@@ -24,7 +24,7 @@ public class Horse
         this.horseSymbol = horseSymbol;
         this.distanceTravelled = 0;
         this.fallen = false;
-        this.horseConfidence = horseConfidence;
+        setConfidence(horseConfidence);
     }
     
     //Other methods of class Horse
@@ -72,7 +72,7 @@ public class Horse
         this.distanceTravelled++;
     }
 
-    public void setConfidence(double newConfidence)
+    public final void setConfidence(double newConfidence)
     {
         if(newConfidence <=1.0 && newConfidence > 0.0){
             this.horseConfidence = newConfidence;
