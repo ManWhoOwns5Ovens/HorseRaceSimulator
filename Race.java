@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,16 +15,6 @@ public class Race
     private Horse lane1Horse;
     private Horse lane2Horse;
     private Horse lane3Horse;
-
-
-    public static void main(String[] a){
-        Race race= new Race(10);
-        race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6), 1);
-        race.addHorse(new Horse('♞', "KOKOMO", 0.5), 2);
-        race.addHorse(new Horse('♛', "EL JEFE", 0.4), 3);
-
-        race.startRace();
-    }
     
     /**
      * Constructor for objects of class Race
@@ -117,23 +106,16 @@ public class Race
             //if race has ended (there are winners, or all horses have fallen)
             if(!winners.isEmpty() || !canRaceContinue(horseArr)){
                 printWinners(winners);
-
-                if(input("Would you like to run another race?(y/n)").equals("y")){
-                    resetHorses(horseArr);
-                    winners.clear();
-                    adjustLaneCount();
-                }
-                else{
-                    finished=true;
-                }
+                finished=true;   
             }
-        
-            
-            
             //wait for 300 milliseconds between "frames"
             try{ 
                 TimeUnit.MILLISECONDS.sleep(300);
-            }catch(Exception e){}
+            }
+            catch(InterruptedException e){
+                System.out.println("Process intrerupted. Aborting race.");
+                return;
+            }
         }
     }
 
@@ -337,7 +319,7 @@ public class Race
         boolean validInput=false;
         while(!validInput){
             try{
-                int newLaneCount=Integer.parseInt(input("How many lanes would you like? (3 or more)"));
+                int newLaneCount=Integer.parseInt(App.input("How many lanes would you like? (3 or more)"));
                 setLaneCount(newLaneCount);
                 validInput=true;
             }
@@ -357,33 +339,11 @@ public class Race
     private void updateHorseConfidence(Horse theHorse, boolean isIncrease){
         final double MODIFIFER=0.1;
         if(isIncrease){
-            theHorse.setConfidence(roundDouble((theHorse.getConfidence()+MODIFIFER),1));
+            theHorse.setConfidence(App.roundDouble((theHorse.getConfidence()+MODIFIFER),1));
         }
         else{
-            theHorse.setConfidence(roundDouble((theHorse.getConfidence()-MODIFIFER),1));
+            theHorse.setConfidence(App.roundDouble((theHorse.getConfidence()-MODIFIFER),1));
         }
     }
-
-    /**
-     * Rounds double to a given number of decimal places
-     * 
-     * @param number the number to be rounded
-     * @param dp the number of decimal places to round to
-     */
-    private double roundDouble(double number, int dp){
-        double factor=Math.pow(10, dp);
-        return (double)(((int)(number*factor))/factor);
-    }
-
-    /**
-     * Generic method for collecting user input as a string
-     * 
-     * @param message message requesting input
-     */
-    public static String input(String message){
-        Scanner s= new Scanner(System.in);
-        System.out.println(message);
-        return s.nextLine();
-    }    
 }
 
