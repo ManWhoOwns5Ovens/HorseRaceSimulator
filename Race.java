@@ -85,6 +85,8 @@ public class Race
 
         setLaneCount(App.adjustRaceSetting("How many lanes would you like? (3 or more)")); //ask user how many lanes they want
 
+        GUI.createFrame(this);
+
         while (!finished)
         {
             //move each horse
@@ -341,6 +343,23 @@ public class Race
         else{
             theHorse.setConfidence(App.roundDouble((theHorse.getConfidence()-MODIFIFER),1));
         }
+    }
+
+    public int getRaceLength(){
+        return raceLength;
+    }
+    public int getLaneCount(){
+        return laneCount;
+    }
+
+    public Horse getLane1Horse(){
+        return lane1Horse;
+    }
+    public Horse getLane2Horse(){
+        return lane2Horse;
+    }
+    public Horse getLane3Horse(){
+        return lane3Horse;
     }
 }
 
