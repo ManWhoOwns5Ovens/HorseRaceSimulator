@@ -105,6 +105,7 @@ public class Race
             //if race has ended (there are winners, or all horses have fallen)
             if(!winners.isEmpty() || !canRaceContinue(horseArr)){
                 printWinners(winners); 
+                GUI.raceEnd(winners); //call GUI to display winners
                 finished=true;   
             }
             //wait for 300 milliseconds between "frames"
@@ -223,12 +224,11 @@ public class Race
      * @param raceLength user input for the race length
      */
     public final void setRaceLength(int raceLength){
-        final int MINIMUM_LENGTH=3; //min. length of race
+        final int MINIMUM_LENGTH=10; // min/default length of race
         final int MAXIMUM_LENGTH=60; //max. length of race
-        final int DEFAULT_LENGTH=10; //ideal and recommended race length
 
         if(raceLength<MINIMUM_LENGTH || raceLength>MAXIMUM_LENGTH){
-            this.raceLength=DEFAULT_LENGTH;
+            this.raceLength=MINIMUM_LENGTH;
         }
         else{
             this.raceLength=raceLength;

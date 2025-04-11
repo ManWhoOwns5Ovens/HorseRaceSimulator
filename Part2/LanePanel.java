@@ -17,7 +17,8 @@ public class LanePanel extends JPanel {
         super.paintComponent(g);
 
         g.drawRect(0,0, (raceLength*25+25)-1, getHeight()-1); //borders of the lane
-        g.drawRect(raceLength*25,0, 25, getHeight()-1); //draw borders of last spot/ finish line
+        //g.drawRect(raceLength*25,0, 25, getHeight()-1); //draw borders of last spot/ finish line
+        g.drawLine(raceLength*25,0,raceLength*25,25);
 
         if(this.horse!= null){
             g.setFont(new Font("SansSerif", Font.PLAIN, 15));

@@ -2,22 +2,12 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] a){
-        boolean finished= false;
         Race race= new Race(adjustRaceSetting("What length should the track be? (min. 2)"));
         race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6), 1);
         race.addHorse(new Horse('♞', "KOKOMO", 0.5), 2);
         race.addHorse(new Horse('♛', "EL JEFE", 0.4), 3);
 
-        while(!finished){
-            race.startRace();
-            if(!input("Would you like to run another race?(y/n)").equals("y")){
-                finished=true;
-                System.exit(0);// close frame, end program
-            }
-            else{
-                race.setRaceLength(adjustRaceSetting("What length should the track be? (min. 2)"));
-            }
-        }
+        race.startRace();
     }
 
     /**
