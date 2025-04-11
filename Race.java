@@ -93,9 +93,6 @@ public class Race
             for (int i=0; i<horseArr.length;i++){
                 moveHorse(horseArr[i]);
             }
-                        
-            //print the race positions
-            printRace();
             
             //check for and record winners
             for(int i=0; i<horseArr.length;i++){
@@ -107,7 +104,7 @@ public class Race
 
             //if race has ended (there are winners, or all horses have fallen)
             if(!winners.isEmpty() || !canRaceContinue(horseArr)){
-                printWinners(winners);
+                printWinners(winners); 
                 finished=true;   
             }
             //wait for 300 milliseconds between "frames"
@@ -188,82 +185,6 @@ public class Race
             return false;
         }
     }
-    
-    /***
-     * Print the race on the terminal
-     */
-    private void printRace()
-    {
-        System.out.print("\033\143"); //clear the terminal window
-        //replaced to properly clear terminal
-        
-        multiplePrint('=',raceLength+3); //top edge of track
-        System.out.println();
-        
-        printLane(lane1Horse);
-        System.out.println();
-        
-        printLane(lane2Horse);
-        System.out.println();
-        
-        printLane(lane3Horse);
-        System.out.println();
-
-        for(int i=0; i<laneCount-3;i++){
-            printLane(null);
-            System.out.println();
-        }
-        
-        multiplePrint('=',raceLength+3); //bottom edge of track
-        System.out.println();    
-    }
-    
-    /**
-     * print a horse's lane during the race
-     * for example
-     * |           X                      |
-     * to show how far the horse has run
-     */
-    private void printLane(Horse theHorse)
-    {
-        if(theHorse == null)
-        {
-            System.out.print('|');
-            multiplePrint(' ',raceLength);
-            System.out.print('|');
-            return; 
-        }
-
-        //calculate how many spaces are needed before
-        //and after the horse
-        int spacesBefore = theHorse.getDistanceTravelled();
-        int spacesAfter = raceLength - theHorse.getDistanceTravelled();
-        
-        //print a | for the beginning of the lane
-        System.out.print('|');
-        
-        //print the spaces before the horse
-        multiplePrint(' ',spacesBefore);
-        
-        //if the horse has fallen then print dead
-        //else print the horse's symbol
-        if(theHorse.hasFallen())
-        {
-            System.out.print('❌');
-        }
-        else
-        {
-            System.out.print(theHorse.getSymbol());
-        }
-        
-        //print the spaces after the horse
-        multiplePrint(' ',spacesAfter);
-        
-        //print the | for the end of the track
-        System.out.print('|');
-
-        System.out.println(" "+theHorse.getName()+" (Current confidence "+theHorse.getConfidence()+")");
-    }
      
     /**
     * Checks if the race can continue on by checking if the horses are in a condition to continue.
@@ -282,22 +203,6 @@ public class Race
             return false;
         }
         return true;
-    }
-    
-    /***
-     * print a character a given number of times.
-     * e.g. printmany('x',5) will print: xxxxx
-     * 
-     * @param aChar the character to Print
-     */
-    private void multiplePrint(char aChar, int times)
-    {
-        int i = 0;
-        while (i < times)
-        {
-            System.out.print(aChar);
-            i = i + 1;
-        }
     }
 
     /***
@@ -319,9 +224,10 @@ public class Race
      */
     public final void setRaceLength(int raceLength){
         final int MINIMUM_LENGTH=3; //min. length of race
+        final int MAXIMUM_LENGTH=60; //max. length of race
         final int DEFAULT_LENGTH=10; //ideal and recommended race length
 
-        if(raceLength<MINIMUM_LENGTH){
+        if(raceLength<MINIMUM_LENGTH || raceLength>MAXIMUM_LENGTH){
             this.raceLength=DEFAULT_LENGTH;
         }
         else{
@@ -351,7 +257,6 @@ public class Race
     public int getLaneCount(){
         return laneCount;
     }
-
     public Horse getLane1Horse(){
         return lane1Horse;
     }

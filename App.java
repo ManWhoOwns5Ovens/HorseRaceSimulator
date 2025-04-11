@@ -12,6 +12,7 @@ public class App {
             race.startRace();
             if(!input("Would you like to run another race?(y/n)").equals("y")){
                 finished=true;
+                System.exit(0);// close frame, end program
             }
             else{
                 race.setRaceLength(adjustRaceSetting("What length should the track be? (min. 2)"));
