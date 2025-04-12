@@ -2,16 +2,15 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
-public class GUI {
+public class RaceGUI {
     // unique variables to be shared across the class
     // methods are separated for readability and maintainability
     private static JFrame raceFrame;
     private static int length;
     private static int lanes;
-    private static Race race;
+    private static Timer timer;
 
-    public static void createFrame(Race newRace){
-        race=newRace;
+    public static void createFrame(Race race){
         length=race.getRaceLength();
         lanes=race.getLaneCount();
 
@@ -20,43 +19,10 @@ public class GUI {
         raceFrame.setSize(length*25+100 + 250, (lanes+1)*25+200);
         raceFrame.setLayout(null);
         
-        displayRace();
+        displayRace(race);
     }
 
-    /*public static void displayRace(){
-        LanePanel lanePanel1= new LanePanel(race.getLane1Horse(), length);
-        lanePanel1.setLocation(25, 50+25*0);
-        lanePanel1.setSize(25*length+25 + 250, 25);
-        raceFrame.add(lanePanel1);
-
-        LanePanel lanePanel2= new LanePanel(race.getLane2Horse(), length);
-        lanePanel2.setLocation(25, 50+25*1);
-        lanePanel2.setSize(25*length+25 +250, 25);
-        raceFrame.add(lanePanel2);
-
-        LanePanel lanePanel3= new LanePanel(race.getLane3Horse(), length);
-        lanePanel3.setLocation(25, 50+25*2);
-        lanePanel3.setSize(25*length+25 +250, 25);
-        raceFrame.add(lanePanel3);
-
-        for(int i=0; i<lanes-3;i++){
-            LanePanel emptyLane= new LanePanel(null, length);
-            emptyLane.setSize(25*length+25 +250, 25);
-            emptyLane.setLocation(25, 50+(i+3)*25);
-            raceFrame.add(emptyLane);
-        }
-
-        raceFrame.setVisible(true);
-
-        Timer timer = new Timer(300, e -> {
-            lanePanel1.updateLane();
-            lanePanel2.updateLane();
-            lanePanel3.updateLane();
-        });
-        timer.start();
-    }*/
-
-    public static void displayRace(){
+    private static void displayRace(Race race){
         JPanel racePanel= new JPanel();
         racePanel.setLayout(new GridLayout(lanes,1));
         racePanel.setLocation(25,50);
@@ -77,13 +43,9 @@ public class GUI {
         }
 
         raceFrame.add(racePanel);
-
-        
         raceFrame.setVisible(true);
 
-        
-
-        Timer timer = new Timer(300, e -> {
+        timer = new Timer(300, e -> {
             lanePanel1.updateLane();
             lanePanel2.updateLane();
             lanePanel3.updateLane();
@@ -92,6 +54,7 @@ public class GUI {
     }
 
     public static void raceEnd(ArrayList<Horse> winners){
+        timer.stop();
         String displayMessage="";
         if(winners.size()>=2){
             displayMessage="It's a tie between ";
@@ -103,6 +66,9 @@ public class GUI {
         }
         else if(winners.size()==1){
             displayMessage="And the winner is... "+winners.get(0).getName()+"!";//Prints race winner;
+        }
+        else{
+            displayMessage="All horses have fallen! Race can no longer continue";
         }
 
         JPanel resultsPanel= new JPanel();
@@ -133,9 +99,8 @@ public class GUI {
         //
         gbc.gridy=2;
         gbc.gridwidth=1;
-        gbc.ipadx=10;
-        gbc.ipady=10;
-        gbc.anchor=GridBagConstraints.CENTER;
+        gbc.weightx=0.5;
+        gbc.anchor = GridBagConstraints.CENTER; 
         resultsPanel.add(yesButton,gbc);
 
         JButton noButton= new JButton("No");
@@ -145,16 +110,17 @@ public class GUI {
         resultsPanel.add(noButton,gbc);
 
         raceFrame.add(resultsPanel);
+        raceFrame.revalidate();
+        raceFrame.repaint();
         raceFrame.setVisible(true);
     }
 
     public static void yesButton(){ //start another race
         raceFrame.dispose();
-        App.main(null);
+        SwingUtilities.invokeLater(() -> App.main(null));
     }
 
     public static void noButton(){ //end program
-        raceFrame.setVisible(false);
         raceFrame.dispose();
         System.exit(0);// close frame, end program
     }

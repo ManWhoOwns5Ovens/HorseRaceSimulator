@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import javax.swing.Timer;
 
 /**
  * A three-horse race, each horse running in its own lane
@@ -15,6 +15,7 @@ public class Race
     private Horse lane1Horse;
     private Horse lane2Horse;
     private Horse lane3Horse;
+    private Timer timer;
     
     /**
      * Constructor for objects of class Race
@@ -22,22 +23,44 @@ public class Race
      * 
      * @param distance the length of the racetrack (in metres/yards...)
      */
-    public Race(int distance)
+    public Race(int distance, int laneCount)
     {
         // initialise instance variables
         setRaceLength(distance);
-        laneCount=3; 
+        setLaneCount(laneCount);
         lane1Horse = null;
         lane2Horse = null;
         lane3Horse = null;
     }
 
-    private void setLaneCount(int newLaneCount){
-        if(newLaneCount<3){
+    /**
+     * Mutator with validation for the race length
+     * 
+     * @param raceLength user input for the race length
+     */
+    private void setRaceLength(int raceLength){
+        final int MINIMUM_LENGTH=10; // min/default length of race
+        final int MAXIMUM_LENGTH=60; //max. length of race
+
+        if(raceLength<MINIMUM_LENGTH || raceLength>MAXIMUM_LENGTH){
+            this.raceLength=MINIMUM_LENGTH;
+        }
+        else{
+            this.raceLength=raceLength;
+        }
+    }
+
+    /**
+     * Mutator with validation for the number of lanes
+     * 
+     * @param laneCount user input for the number of lanes
+     */
+    private void setLaneCount(int laneCount){
+        if(laneCount<3){
             this.laneCount=3;
         }
         else{
-            this.laneCount=newLaneCount;
+            this.laneCount=laneCount;
         }
         
     }
@@ -75,20 +98,14 @@ public class Race
      */
     public void startRace()
     {
-        //declare a local variable to tell us when the race is finished
-        boolean finished = false;
-
         Horse[] horseArr= {lane1Horse,lane2Horse,lane3Horse}; //keep refrences to objects in one place to avoid repetitive code by iterating through array
         ArrayList<Horse> winners=new ArrayList<>();//number of horses in a tie can differ
             
         resetHorses(horseArr);
 
-        setLaneCount(App.adjustRaceSetting("How many lanes would you like? (3 or more)")); //ask user how many lanes they want
+        RaceGUI.createFrame(this);
 
-        GUI.createFrame(this);
-
-        while (!finished)
-        {
+        timer= new Timer(300, e->{
             //move each horse
             for (int i=0; i<horseArr.length;i++){
                 moveHorse(horseArr[i]);
@@ -104,40 +121,13 @@ public class Race
 
             //if race has ended (there are winners, or all horses have fallen)
             if(!winners.isEmpty() || !canRaceContinue(horseArr)){
-                printWinners(winners); 
-                GUI.raceEnd(winners); //call GUI to display winners
-                finished=true;   
+                timer.stop(); //stop the timer
+                RaceGUI.raceEnd(winners); //call GUI to display winners
             }
-            //wait for 300 milliseconds between "frames"
-            try{ 
-                TimeUnit.MILLISECONDS.sleep(300);
-            }
-            catch(InterruptedException e){
-                System.out.println("Process intrerupted. Aborting race.");
-                return;
-            }
-        }
+        });
+        timer.start(); //start the timer to move the horses
     }
 
-    /**
-     * If there is one winner recorded will anounce their win
-     * If there are more than one winners will output a statement anouncing all of them
-     * 
-     * @param winners are horses who arrived at the finshing line first in the same state
-     * Recorded and called by startRace()
-     */
-    private void printWinners(ArrayList<Horse> winners){
-        if(winners.size()>=2){
-            System.out.print("\n It's a tie between ");
-            for(int i=0; i<winners.size();i++){
-                if(i!=0){System.out.print(" AND ");}// add AND in front if not the first horse
-                System.out.print(winners.get(i).getName());
-            }
-        }
-        else if(winners.size()==1){
-            System.out.println("And the winner is... "+winners.get(0).getName()+"!");//Prints race winner;
-        }
-    }
     
     /**
      * Randomly make a horse move forward or fall depending
@@ -200,7 +190,6 @@ public class Race
             }  
         }
         if(fallenHorses>=horses.length){
-            System.out.println("Horses cannot continue anymore. Suspending the race.");
             return false;
         }
         return true;
@@ -218,22 +207,7 @@ public class Race
         }
     }
 
-    /**
-     * Mutator with validation for the race length
-     * 
-     * @param raceLength user input for the race length
-     */
-    public final void setRaceLength(int raceLength){
-        final int MINIMUM_LENGTH=10; // min/default length of race
-        final int MAXIMUM_LENGTH=60; //max. length of race
-
-        if(raceLength<MINIMUM_LENGTH || raceLength>MAXIMUM_LENGTH){
-            this.raceLength=MINIMUM_LENGTH;
-        }
-        else{
-            this.raceLength=raceLength;
-        }
-    }
+    
 
     /**
      * Modify a horse's confidence rating
