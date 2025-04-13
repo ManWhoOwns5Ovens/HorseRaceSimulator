@@ -15,6 +15,7 @@ public class Race
     private int raceLength;
     private int laneCount;
     private LaneType laneType;
+    private Weather weather;
 
     private Horse lane1Horse;
     private Horse lane2Horse;
@@ -28,7 +29,7 @@ public class Race
      * 
      * @param distance the length of the racetrack (in metres/yards...)
      */
-    public Race(int distance, int laneCount,LaneType laneType)
+    public Race(int distance, int laneCount,LaneType laneType, Weather weather)
     {
         if(instance==null){
             lane1Horse = null;
@@ -44,6 +45,7 @@ public class Race
         setRaceLength(distance);
         setLaneCount(laneCount);
         this.laneType=laneType;
+        this.weather=weather;
     }
 
     /**
@@ -79,19 +81,22 @@ public class Race
     }
 
     public int getRaceLength(){
-        return raceLength;
+        return this.raceLength;
     }
     public int getLaneCount(){
-        return laneCount;
+        return this.laneCount;
+    }
+    public Weather getWeather(){
+        return this.weather;
     }
     public Horse getLane1Horse(){
-        return lane1Horse;
+        return this.lane1Horse;
     }
     public Horse getLane2Horse(){
-        return lane2Horse;
+        return this.lane2Horse;
     }
     public Horse getLane3Horse(){
-        return lane3Horse;
+        return this.lane3Horse;
     }
     
     /**
@@ -131,7 +136,7 @@ public class Race
 
         //RaceGUI.createFrame(this);
 
-        timer= new Timer(300, e->{
+        timer= new Timer(300+this.weather.getSpeedModifier(), e->{
             //move each horse
             for (int i=0; i<horseArr.length;i++){
                 moveHorse(horseArr[i]);
@@ -177,7 +182,7 @@ public class Race
             //the probability that the horse will fall is very small (max is 0.1)
             //but will also will depends exponentially on confidence 
             //so if you double the confidence, the probability that it will fall is *2
-            if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence()))
+            if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence()*weather.getFallingModifier()))
             {
                 theHorse.fall();
                 updateHorseConfidence(theHorse, false);

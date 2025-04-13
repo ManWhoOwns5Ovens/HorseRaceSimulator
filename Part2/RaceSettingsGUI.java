@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.HashMap;
 import javax.swing.*;
 
 public class RaceSettingsGUI {
@@ -28,16 +29,18 @@ public class RaceSettingsGUI {
     
 
     private static JPanel createRaceSettingsPanel() {
-        SpinnerNumberModel raceLengthModel = new SpinnerNumberModel(10, 10, 60, 1);
-        JSpinner raceLengthSpinner = new JSpinner(raceLengthModel);
-    
-        SpinnerNumberModel lanesCountModel = new SpinnerNumberModel(3, 3, 12, 1);
-        JSpinner lanesCountSpinner = new JSpinner(lanesCountModel);
+        
+        JSpinner raceLengthSpinner = createRaceLengthSpinner();
+        JSpinner lanesCountSpinner = createLaneCountSpinner();
+        JComboBox laneTypeList = createLaneTypeList();
 
-        JComboBox laneTypeList = new JComboBox(LaneType.values());
-        laneTypeList.setSelectedIndex(0);
+        HashMap<String,Weather> weatherMap = new HashMap<>();
+        weatherMap.put("Sunny", new Weather("Sunny", 0, 1.0, Color.YELLOW));
+        weatherMap.put("Rainy", new Weather("Rainy", 200, 1.0, Color.CYAN));
+        weatherMap.put("Snowy", new Weather("Snowy", 0, 2.0, Color.WHITE));
+        JComboBox weatherList = createWeatherList(weatherMap);
 
-        JPanel panel = new JPanel(new GridLayout(4, 2));
+        JPanel panel = new JPanel(new GridLayout(5, 2));
         panel.setSize(300,200);
     
         panel.add(new JLabel("Race Length:"));
@@ -48,18 +51,43 @@ public class RaceSettingsGUI {
 
         panel.add(new JLabel("Lane Type:"));
         panel.add(laneTypeList);
+
+        panel.add(new JLabel("Weather:"));
+        panel.add(weatherList);
     
         panel.add(new JLabel("Start Race:"));
         JButton startButton = new JButton("Confirm");
-        startButton.addActionListener(e -> createRace((int) raceLengthSpinner.getValue(),(int) lanesCountSpinner.getValue(), (LaneType)laneTypeList.getSelectedItem()));
+        startButton.addActionListener(e -> createRace((int) raceLengthSpinner.getValue(),(int) lanesCountSpinner.getValue(), (LaneType)laneTypeList.getSelectedItem(),(Weather) weatherMap.get(weatherList.getSelectedItem())));
         panel.add(startButton);
     
         return panel;
     }
+
+    private static JSpinner createRaceLengthSpinner(){
+        SpinnerNumberModel raceLengthModel = new SpinnerNumberModel(10, 10, 60, 1);
+        return new JSpinner(raceLengthModel);
+    }
+
+    private static JSpinner createLaneCountSpinner(){
+        SpinnerNumberModel lanesCountModel = new SpinnerNumberModel(3, 3, 12, 1);
+        return new JSpinner(lanesCountModel);
+    }
+
+    private static JComboBox createLaneTypeList(){
+        JComboBox laneTypeList = new JComboBox(LaneType.values());
+        laneTypeList.setSelectedIndex(0);
+        return laneTypeList;
+    }
+
+    private static JComboBox createWeatherList(HashMap<String,Weather> weatherMap){
+        JComboBox weatherList = new JComboBox(weatherMap.keySet().toArray());
+        weatherList.setSelectedIndex(2);
+        return weatherList;
+    }
     
 
-    private static void createRace(int raceLength, int laneCount, LaneType laneType) {
-        Race race= new Race(raceLength,laneCount,laneType);
+    private static void createRace(int raceLength, int laneCount, LaneType laneType, Weather weather) {
+        Race race= new Race(raceLength,laneCount,laneType,weather);
         race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6), 1);
         race.addHorse(new Horse('♞', "KOKOMO", 0.5), 2);
         race.addHorse(new Horse('♛', "EL JEFE", 0.4), 3);
