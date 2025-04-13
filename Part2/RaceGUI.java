@@ -28,13 +28,13 @@ public class RaceGUI {
         racePanel.setLocation(25,50);
         racePanel.setSize(25*length+25 + 250, 25*lanes);
 
-        LanePanel lanePanel1= new LanePanel(race.getLane1Horse(), length);
+        StraightLanePanel lanePanel1= new StraightLanePanel(race.getLane1Horse(), length);
         racePanel.add(lanePanel1);
 
-        LanePanel lanePanel2= new LanePanel(race.getLane2Horse(), length);
+        StraightLanePanel lanePanel2= new StraightLanePanel(race.getLane2Horse(), length);
         racePanel.add(lanePanel2);
 
-        LanePanel lanePanel3= new LanePanel(race.getLane3Horse(), length);
+        StraightLanePanel lanePanel3= new StraightLanePanel(race.getLane3Horse(), length);
         racePanel.add(lanePanel3);
 
         for(int i=0; i<lanes-3;i++){

@@ -1,6 +1,4 @@
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import javax.swing.*;
 
 public class RaceSettingsGUI {
@@ -12,13 +10,7 @@ public class RaceSettingsGUI {
         settingsFrame.setSize(600, 400);
         settingsFrame.setLayout(new GridBagLayout());
     
-        SpinnerNumberModel raceLengthModel = new SpinnerNumberModel(10, 10, 60, 1);
-        JSpinner raceLengthSpinner = new JSpinner(raceLengthModel);
-    
-        SpinnerNumberModel lanesModel = new SpinnerNumberModel(3, 3, 10, 1);
-        JSpinner lanesSpinner = new JSpinner(lanesModel);
-    
-        JPanel raceSettingsPanel = createRaceSettingsPanel(raceLengthSpinner, lanesSpinner);
+        JPanel raceSettingsPanel = createRaceSettingsPanel();
     
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;    
@@ -35,7 +27,16 @@ public class RaceSettingsGUI {
     }
     
 
-    private static JPanel createRaceSettingsPanel(JSpinner raceLengthSpinner, JSpinner lanesSpinner) {
+    private static JPanel createRaceSettingsPanel() {
+        SpinnerNumberModel raceLengthModel = new SpinnerNumberModel(10, 10, 60, 1);
+        JSpinner raceLengthSpinner = new JSpinner(raceLengthModel);
+    
+        SpinnerNumberModel lanesCountModel = new SpinnerNumberModel(3, 3, 12, 1);
+        JSpinner lanesCountSpinner = new JSpinner(lanesCountModel);
+
+        JComboBox laneTypeList = new JComboBox(LaneType.values());
+        laneTypeList.setSelectedIndex(0);
+
         JPanel panel = new JPanel(new GridLayout(4, 2));
         panel.setSize(300,200);
     
@@ -43,25 +44,29 @@ public class RaceSettingsGUI {
         panel.add(raceLengthSpinner);
     
         panel.add(new JLabel("Lanes:"));
-        panel.add(lanesSpinner);
+        panel.add(lanesCountSpinner);
+
+        panel.add(new JLabel("Lane Type:"));
+        panel.add(laneTypeList);
     
         panel.add(new JLabel("Start Race:"));
         JButton startButton = new JButton("Confirm");
-        startButton.addActionListener(e -> createRace((int) raceLengthSpinner.getValue(),(int) lanesSpinner.getValue()));
+        startButton.addActionListener(e -> createRace((int) raceLengthSpinner.getValue(),(int) lanesCountSpinner.getValue(), (LaneType)laneTypeList.getSelectedItem()));
         panel.add(startButton);
     
         return panel;
     }
     
 
-    private static void createRace(int raceLength, int laneCount){
-        Race race= new Race(raceLength,laneCount);
+    private static void createRace(int raceLength, int laneCount, LaneType laneType) {
+        Race race= new Race(raceLength,laneCount,laneType);
         race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6), 1);
         race.addHorse(new Horse('♞', "KOKOMO", 0.5), 2);
         race.addHorse(new Horse('♛', "EL JEFE", 0.4), 3);
 
         settingsFrame.dispose();
 
+        RaceGUI.createFrame(race);
         race.startRace();
     }
 

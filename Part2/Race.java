@@ -10,27 +10,40 @@ import javax.swing.Timer;
  */
 public class Race
 {
+    private static Race instance;
+
     private int raceLength;
     private int laneCount;
+    private LaneType laneType;
+
     private Horse lane1Horse;
     private Horse lane2Horse;
     private Horse lane3Horse;
+
     private Timer timer;
-    
+   
     /**
      * Constructor for objects of class Race
      * Initially there are no horses in the lanes
      * 
      * @param distance the length of the racetrack (in metres/yards...)
      */
-    public Race(int distance, int laneCount)
+    public Race(int distance, int laneCount,LaneType laneType)
     {
+        if(instance==null){
+            lane1Horse = null;
+            lane2Horse = null;
+            lane3Horse = null;
+        }
+        else{
+            lane1Horse = instance.getLane1Horse();
+            lane2Horse = instance.getLane2Horse();
+            lane3Horse = instance.getLane3Horse();
+        }
         // initialise instance variables
         setRaceLength(distance);
         setLaneCount(laneCount);
-        lane1Horse = null;
-        lane2Horse = null;
-        lane3Horse = null;
+        this.laneType=laneType;
     }
 
     /**
@@ -64,6 +77,22 @@ public class Race
         }
         
     }
+
+    public int getRaceLength(){
+        return raceLength;
+    }
+    public int getLaneCount(){
+        return laneCount;
+    }
+    public Horse getLane1Horse(){
+        return lane1Horse;
+    }
+    public Horse getLane2Horse(){
+        return lane2Horse;
+    }
+    public Horse getLane3Horse(){
+        return lane3Horse;
+    }
     
     /**
      * Adds a horse to the race in a given lane
@@ -73,22 +102,18 @@ public class Race
      */
     public void addHorse(Horse theHorse, int laneNumber)
     {
-        if (laneNumber == 1)
-        {
-            lane1Horse = theHorse;
+        if(instance==null){
+            if (laneNumber == 1){
+                lane1Horse = theHorse;
+            }
+            else if (laneNumber == 2){
+                lane2Horse = theHorse;
+            }
+            else if (laneNumber == 3){
+                lane3Horse = theHorse;
+            }
         }
-        else if (laneNumber == 2)
-        {
-            lane2Horse = theHorse;
-        }
-        else if (laneNumber == 3)
-        {
-            lane3Horse = theHorse;
-        }
-        else
-        {
-            System.out.println("Cannot add horse to lane " + laneNumber + " because there is no such lane");
-        }
+        
     }
     
     /**
@@ -98,12 +123,13 @@ public class Race
      */
     public void startRace()
     {
+        instance=this;
         Horse[] horseArr= {lane1Horse,lane2Horse,lane3Horse}; //keep refrences to objects in one place to avoid repetitive code by iterating through array
         ArrayList<Horse> winners=new ArrayList<>();//number of horses in a tie can differ
             
         resetHorses(horseArr);
 
-        RaceGUI.createFrame(this);
+        //RaceGUI.createFrame(this);
 
         timer= new Timer(300, e->{
             //move each horse
@@ -225,20 +251,6 @@ public class Race
         }
     }
 
-    public int getRaceLength(){
-        return raceLength;
-    }
-    public int getLaneCount(){
-        return laneCount;
-    }
-    public Horse getLane1Horse(){
-        return lane1Horse;
-    }
-    public Horse getLane2Horse(){
-        return lane2Horse;
-    }
-    public Horse getLane3Horse(){
-        return lane3Horse;
-    }
+    
 }
 
