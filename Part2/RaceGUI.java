@@ -8,63 +8,133 @@ public class RaceGUI {
     private static JFrame raceFrame;
     private static int length;
     private static int laneCount;
+    private static Race race;
+    
+    private static int raceWidth;
+    private static int raceHeight;
+
     private static Timer timer;
 
     private static ArrayList<LanePanel> lanes = new ArrayList<>();
 
-    public static void createFrame(Race race){
-        length=race.getRaceLength();
-        laneCount=race.getLaneCount();
+    public static void createFrame(Race newRace){
+        length=newRace.getRaceLength();
+        laneCount=newRace.getLaneCount();
+        race=newRace;
 
         raceFrame= new JFrame("Race");
         raceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        raceFrame.setSize(length*25+100 + 250, (laneCount+1)*25+200);
         raceFrame.setLayout(null);
         
-        displayRace(race);
+        switch(race.getLaneType()){
+            case LaneType.STRAIGHT:
+                createStraightRacePanel();
+                break;
+            case LaneType.OVAL:
+                createOvalRacePanel();
+                break;
+        }
     }
 
-    private static void displayRace(Race race){
+    private static void createOvalRacePanel(){
         JPanel racePanel= new JPanel();
-        racePanel.setLayout(new GridLayout(laneCount,1));
-        racePanel.setLocation(25,50);
-        racePanel.setSize(25*length+25 + 250, 25*laneCount);
 
-        //
+        raceWidth=length*25 + laneCount*50;
+        raceHeight=length*25/2 + laneCount*50;
+
+        raceFrame.setSize(raceWidth+150, raceHeight+400);
+        racePanel.setLayout(null);
+        racePanel.setLocation(25,50);
+        racePanel.setSize(raceWidth+100,raceHeight+100);
+
+        OvalLanePanel lanePanel1= new OvalLanePanel(race.getLane1Horse(), length,(laneCount-(1-1)),1);
+        lanePanel1.setSize(raceWidth,raceHeight);
+        lanePanel1.setLocation(25,50);
+        racePanel.add(lanePanel1);
+        lanes.add(lanePanel1);
+
+        OvalLanePanel lanePanel2= new OvalLanePanel(race.getLane2Horse(), length,(laneCount-(2-1)),2);
+        lanePanel2.setSize(raceWidth,raceHeight);
+        lanePanel2.setLocation(25,50);
+        racePanel.add(lanePanel2);
+        lanes.add(lanePanel2); 
+
+        OvalLanePanel lanePanel3= new OvalLanePanel(race.getLane3Horse(), length,(laneCount-(3-1)),3);
+        lanePanel3.setSize(raceWidth,raceHeight);
+        lanePanel3.setLocation(25,50);
+        racePanel.add(lanePanel3);
+        lanes.add(lanePanel3); 
+
+        for(int i=4; i<=laneCount;i++){
+            OvalLanePanel emptyLane= new OvalLanePanel(null, length,(laneCount-(i-1)),i);
+            emptyLane.setSize(raceWidth,raceHeight);
+            emptyLane.setLocation(25,50);
+            racePanel.add(emptyLane);
+        }
+
+        JLabel weatherLabel=new JLabel("Weather:"+race.getWeather().getName());
+        weatherLabel.setFont(new Font("SansSerif", Font.PLAIN, 15));
+        weatherLabel.setSize(raceWidth+150, 25);
+        weatherLabel.setLocation(25,25);
+        racePanel.add(weatherLabel);
+
+        raceFrame.add(racePanel);
+
+        raceFrame.setVisible(true);
+        startTimer();
+    }
+
+    private static void createStraightRacePanel(){
+        JPanel racePanel= new JPanel();
+
+        raceWidth=length*25;
+        raceHeight=(laneCount+1)*25;
+
+        raceFrame.setSize(raceWidth+350, raceHeight+200);
+        racePanel.setLayout(new GridLayout(laneCount+1,1));
+        racePanel.setLocation(25,50);
+
+        racePanel.setSize(raceWidth + 250, raceHeight);
+
         StraightLanePanel lanePanel1= new StraightLanePanel(race.getLane1Horse(), length);
-        lanePanel1.setBackground(race.getWeather().getColor());
         racePanel.add(lanePanel1);
         lanes.add(lanePanel1);
 
         StraightLanePanel lanePanel2= new StraightLanePanel(race.getLane2Horse(), length);
-        lanePanel2.setBackground(race.getWeather().getColor());
         racePanel.add(lanePanel2);
         lanes.add(lanePanel2);
 
         StraightLanePanel lanePanel3= new StraightLanePanel(race.getLane3Horse(), length);
-        lanePanel3.setBackground(race.getWeather().getColor());
         racePanel.add(lanePanel3);
         lanes.add(lanePanel3);
-        //
 
         for(int i=0; i<laneCount-3;i++){
-            LanePanel emptyLane= new LanePanel(null, length);
+            StraightLanePanel emptyLane= new StraightLanePanel(null, length);
             racePanel.add(emptyLane);
         }
 
-        raceFrame.add(racePanel);
-        raceFrame.setVisible(true);
+        JLabel weatherLabel=new JLabel("Weather:"+race.getWeather().getName());
+        racePanel.add(weatherLabel);
 
+        raceFrame.add(racePanel);
+
+        raceFrame.setVisible(true);
+        startTimer();
+    }
+
+    private static void startTimer(){
         timer = new Timer(300+race.getWeather().getSpeedModifier(), e -> {
-            lanePanel1.updateLane();
-            lanePanel2.updateLane();
-            lanePanel3.updateLane();
+            for(LanePanel lane: lanes){
+                lane.updateLane();
+            }
         });
         timer.start();
     }
 
     public static void raceEnd(ArrayList<Horse> winners){
         timer.stop();
+
+        System.out.println("race ended");
 
         if(winners.size()==0){
             for(LanePanel lane: lanes){
@@ -85,8 +155,15 @@ public class RaceGUI {
     private static JPanel createResultsPanel(String displayMessage){
         JPanel resultsPanel= new JPanel();
         resultsPanel.setLayout(new GridBagLayout());
-        resultsPanel.setSize(25*length+250, 100);
-        resultsPanel.setLocation(25, 50+25*laneCount);
+        resultsPanel.setSize(raceWidth, 100);
+
+        if(race.getLaneType()==LaneType.OVAL){
+            resultsPanel.setLocation(25, raceHeight+150);
+        }
+        else{
+            resultsPanel.setLocation(25, 50+raceHeight);
+        }
+        
 
         GridBagConstraints gbc= new GridBagConstraints();
 

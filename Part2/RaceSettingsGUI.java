@@ -38,7 +38,7 @@ public class RaceSettingsGUI {
         weatherMap.put("Sunny", new Weather("Sunny", 0, 1.0, Color.YELLOW));
         weatherMap.put("Rainy", new Weather("Rainy", 200, 1.0, Color.CYAN));
         weatherMap.put("Snowy", new Weather("Snowy", 0, 2.0, Color.WHITE));
-        JComboBox weatherList = createWeatherList(weatherMap);
+        JComboBox weatherList = createWeatherList(weatherMap.keySet().toArray());
 
         JPanel panel = new JPanel(new GridLayout(5, 2));
         panel.setSize(300,200);
@@ -57,7 +57,7 @@ public class RaceSettingsGUI {
     
         panel.add(new JLabel("Start Race:"));
         JButton startButton = new JButton("Confirm");
-        startButton.addActionListener(e -> createRace((int) raceLengthSpinner.getValue(),(int) lanesCountSpinner.getValue(), (LaneType)laneTypeList.getSelectedItem(),(Weather) weatherMap.get(weatherList.getSelectedItem())));
+        startButton.addActionListener(e -> createRace((int) raceLengthSpinner.getValue(),(int) lanesCountSpinner.getValue(), (LaneType)laneTypeList.getSelectedItem(),(Weather)weatherMap.get(weatherList.getSelectedItem())));
         panel.add(startButton);
     
         return panel;
@@ -75,12 +75,12 @@ public class RaceSettingsGUI {
 
     private static JComboBox createLaneTypeList(){
         JComboBox laneTypeList = new JComboBox(LaneType.values());
-        laneTypeList.setSelectedIndex(0);
+        laneTypeList.setSelectedIndex(1);
         return laneTypeList;
     }
 
-    private static JComboBox createWeatherList(HashMap<String,Weather> weatherMap){
-        JComboBox weatherList = new JComboBox(weatherMap.keySet().toArray());
+    private static JComboBox createWeatherList(Object[] weatherValues){
+        JComboBox weatherList = new JComboBox(weatherValues);
         weatherList.setSelectedIndex(2);
         return weatherList;
     }
@@ -88,7 +88,7 @@ public class RaceSettingsGUI {
 
     private static void createRace(int raceLength, int laneCount, LaneType laneType, Weather weather) {
         Race race= new Race(raceLength,laneCount,laneType,weather);
-        race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6), 1);
+        race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 1.0), 1);
         race.addHorse(new Horse('♞', "KOKOMO", 0.5), 2);
         race.addHorse(new Horse('♛', "EL JEFE", 0.4), 3);
 

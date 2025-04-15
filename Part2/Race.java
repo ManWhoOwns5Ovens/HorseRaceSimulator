@@ -86,6 +86,9 @@ public class Race
     public int getLaneCount(){
         return this.laneCount;
     }
+    public LaneType getLaneType(){
+        return this.laneType;
+    }
     public Weather getWeather(){
         return this.weather;
     }
