@@ -139,7 +139,7 @@ public class Race
 
         //RaceGUI.createFrame(this);
 
-        timer= new Timer(300+this.weather.getSpeedModifier(), e->{
+        timer= new Timer(100+this.weather.getSpeedModifier(), e->{
             //move each horse
             for (int i=0; i<horseArr.length;i++){
                 moveHorse(horseArr[i]);

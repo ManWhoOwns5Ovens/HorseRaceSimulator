@@ -16,15 +16,19 @@ public class OvalLanePanel extends LanePanel {
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        int width=raceLength*25 + (laneNumber-1)*50;
-        int height=raceLength*25/2 + (laneNumber-1)*50;        
+        int width=raceLength*25 + laneNumber*50;
+        int height=raceLength*25/2 + laneNumber*50;  
+        
         
         g.drawOval(25*offset,25*offset,width-1,height-1);
         g.drawOval(25*offset-25,25*offset-25,width+50-1,height+50-1);
+        g.drawLine(25*offset+width/2,25*offset+height,25*offset+width/2,25*offset+height+50);
         
         if(this.horse!= null){
             g.setFont(new Font("SansSerif", Font.PLAIN, 15));
-            g.drawString(this.horse.getSymbol()+"",getHorseX(),getHorseY());
+            g.drawString(this.symbol+"",getHorseX()-10,getHorseY()+5);
+
+            g.drawString("X",25*offset+(raceLength*25 + laneNumber*50)/2,25*offset+(raceLength*25/2 + laneNumber*50)/2);
     
             g.setFont(new Font("SansSerif", Font.PLAIN, 10));
         }
@@ -33,17 +37,17 @@ public class OvalLanePanel extends LanePanel {
     private int getHorseX(){
         double f=(double)this.horse.getDistanceTravelled() / (double)this.raceLength;
         double angle=2 * Math.PI * f;
-        int radius= (raceLength*25 + (laneNumber-1)*50)/2;
+        int radius= (raceLength*25 + laneNumber*50)/2+7;
 
-        return (int)(25*offset+radius+radius*Math.cos(angle));
+        return (int)(25*offset+radius+radius*Math.sin(angle));
     }
 
     private int getHorseY(){
         double f=(double)this.horse.getDistanceTravelled() / (double)this.raceLength;
         double angle=2 * Math.PI * f;
-        int radius= (raceLength*25/2 + (laneNumber-1)*50)/2;
+        int radius= (raceLength*25/2 + laneNumber*50)/2+7;
 
-        return (int)(25*offset+radius+ radius * Math.sin(angle));
+        return (int)(25*offset+radius+ radius * Math.cos(angle));
     }
 
 }

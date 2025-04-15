@@ -64,7 +64,7 @@ public class RaceSettingsGUI {
     }
 
     private static JSpinner createRaceLengthSpinner(){
-        SpinnerNumberModel raceLengthModel = new SpinnerNumberModel(10, 10, 60, 1);
+        SpinnerNumberModel raceLengthModel = new SpinnerNumberModel(10, 10, 50, 1);
         return new JSpinner(raceLengthModel);
     }
 

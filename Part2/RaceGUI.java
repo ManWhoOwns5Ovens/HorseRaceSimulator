@@ -47,26 +47,26 @@ public class RaceGUI {
         racePanel.setLocation(25,50);
         racePanel.setSize(raceWidth+100,raceHeight+100);
 
-        OvalLanePanel lanePanel1= new OvalLanePanel(race.getLane1Horse(), length,(laneCount-(1-1)),1);
+        OvalLanePanel lanePanel1= new OvalLanePanel(race.getLane1Horse(), length,(laneCount-0),0);
         lanePanel1.setSize(raceWidth,raceHeight);
         lanePanel1.setLocation(25,50);
         racePanel.add(lanePanel1);
         lanes.add(lanePanel1);
 
-        OvalLanePanel lanePanel2= new OvalLanePanel(race.getLane2Horse(), length,(laneCount-(2-1)),2);
+        OvalLanePanel lanePanel2= new OvalLanePanel(race.getLane2Horse(), length,(laneCount-1),1);
         lanePanel2.setSize(raceWidth,raceHeight);
         lanePanel2.setLocation(25,50);
         racePanel.add(lanePanel2);
         lanes.add(lanePanel2); 
 
-        OvalLanePanel lanePanel3= new OvalLanePanel(race.getLane3Horse(), length,(laneCount-(3-1)),3);
+        OvalLanePanel lanePanel3= new OvalLanePanel(race.getLane3Horse(), length,(laneCount-2),2);
         lanePanel3.setSize(raceWidth,raceHeight);
         lanePanel3.setLocation(25,50);
         racePanel.add(lanePanel3);
         lanes.add(lanePanel3); 
 
-        for(int i=4; i<=laneCount;i++){
-            OvalLanePanel emptyLane= new OvalLanePanel(null, length,(laneCount-(i-1)),i);
+        for(int i=3; i<laneCount;i++){
+            OvalLanePanel emptyLane= new OvalLanePanel(null, length,(laneCount-i),i);
             emptyLane.setSize(raceWidth,raceHeight);
             emptyLane.setLocation(25,50);
             racePanel.add(emptyLane);
@@ -94,7 +94,7 @@ public class RaceGUI {
         racePanel.setLayout(new GridLayout(laneCount+1,1));
         racePanel.setLocation(25,50);
 
-        racePanel.setSize(raceWidth + 250, raceHeight);
+        racePanel.setSize(raceWidth + 350, raceHeight);
 
         StraightLanePanel lanePanel1= new StraightLanePanel(race.getLane1Horse(), length);
         racePanel.add(lanePanel1);
@@ -123,7 +123,7 @@ public class RaceGUI {
     }
 
     private static void startTimer(){
-        timer = new Timer(300+race.getWeather().getSpeedModifier(), e -> {
+        timer = new Timer(100+race.getWeather().getSpeedModifier(), e -> {
             for(LanePanel lane: lanes){
                 lane.updateLane();
             }
@@ -155,7 +155,7 @@ public class RaceGUI {
     private static JPanel createResultsPanel(String displayMessage){
         JPanel resultsPanel= new JPanel();
         resultsPanel.setLayout(new GridBagLayout());
-        resultsPanel.setSize(raceWidth, 100);
+        resultsPanel.setSize(raceWidth+200, 100);
 
         if(race.getLaneType()==LaneType.OVAL){
             resultsPanel.setLocation(25, raceHeight+150);
