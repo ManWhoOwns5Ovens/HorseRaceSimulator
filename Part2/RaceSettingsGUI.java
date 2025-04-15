@@ -1,9 +1,11 @@
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
 
 public class RaceSettingsGUI {
     private static JFrame settingsFrame;
+    private static RaceGUI gui;
 
     public static void createFrame() {
         settingsFrame = new JFrame("Race Settings");
@@ -75,7 +77,7 @@ public class RaceSettingsGUI {
 
     private static JComboBox createLaneTypeList(){
         JComboBox laneTypeList = new JComboBox(LaneType.values());
-        laneTypeList.setSelectedIndex(1);
+        laneTypeList.setSelectedIndex(0);
         return laneTypeList;
     }
 
@@ -94,8 +96,22 @@ public class RaceSettingsGUI {
 
         settingsFrame.dispose();
 
-        RaceGUI.createFrame(race);
+        switch(race.getLaneType()){
+            case LaneType.STRAIGHT:
+                gui=new StraightRaceGUI(race);
+                break;
+            case LaneType.OVAL:
+                gui=new OvalRaceGUI(race);
+                break;
+        }
+
+        gui.createFrame();
         race.startRace();
     }
 
+    public static void raceEnd(ArrayList<Horse> winners){
+        if(gui!=null){
+            gui.raceEnd(winners);
+        }
+    }
 }

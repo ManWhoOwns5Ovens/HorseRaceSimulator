@@ -156,7 +156,7 @@ public class Race
             //if race has ended (there are winners, or all horses have fallen)
             if(!winners.isEmpty() || !canRaceContinue(horseArr)){
                 timer.stop(); //stop the timer
-                RaceGUI.raceEnd(winners); //call GUI to display winners
+                RaceSettingsGUI.raceEnd(winners);
             }
         });
         timer.start(); //start the timer to move the horses
