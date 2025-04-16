@@ -2,19 +2,22 @@
 import java.awt.Color;
 
 public class Weather extends RaceCondition{
-    private String weatherName;
+    private double fallingModifier;
     private Color color;
 
-    public Weather(double speedModifier, double fallingModifier, String weatherName,Color color) {
-        super(speedModifier, fallingModifier);
-        this.weatherName = weatherName;
-        this.color = color;
-    }
+    public static final Weather SUNNY = new Weather( "Sunny",0, 1.0, Color.YELLOW);
+    public static final Weather RAINY = new Weather( "Rainy", -2.0, 1.0, Color.CYAN);
+    public static final Weather SNOWY = new Weather( "Snowy", 0, 2.0, Color.WHITE);
 
-    public String getName(){
-        return weatherName;
+    public Weather(String name, double speedModifier, double fallingModifier,Color color) {
+        super(name,speedModifier);
+        this.fallingModifier=fallingModifier;
+        this.color = color;
     }
     public Color getColor(){
         return color;
+    }
+    public double getFallingModifier(){
+        return fallingModifier;
     }
 }

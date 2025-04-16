@@ -13,14 +13,17 @@ public class Horse
     private int distanceTravelled;
     private boolean fallen;
     private double horseConfidence;
+
     private double horseSpeed;
     private int horseEndurance;
+
+    private Breed horseBreed;
       
     //Constructor of class Horse
     /**
      * Constructor for objects of class Horse
      */
-    public Horse(char horseSymbol, String horseName, double horseConfidence, double horseSpeed, int horseEndurance)
+    public Horse(char horseSymbol, String horseName, double horseConfidence, double horseSpeed, int horseEndurance, Breed horseBreed)
     {
         this.horseName = horseName;
         this.horseSymbol = horseSymbol;
@@ -29,6 +32,7 @@ public class Horse
         setConfidence(horseConfidence);
         setSpeed(horseSpeed);
         setEndurance(horseEndurance);
+        this.horseBreed=horseBreed;
     }
     
     //Other methods of class Horse
@@ -63,13 +67,24 @@ public class Horse
     }
 
     public int getMovementInterval(Weather raceWeather){
-        double speed=this.horseSpeed+raceWeather.getSpeedModifier();
+        double speed=this.horseSpeed+this.horseBreed.getSpeedModifier()+raceWeather.getSpeedModifier();
         if(speed<=0.0){
             return 10000;
         }
         else{
             return (int)(1000/speed);
         }
+    }
+
+    public double getFinalConfidence(){
+        double finalConfidence=this.horseConfidence*this.horseBreed.getConfidenceModifier();
+        if(finalConfidence>1.0){
+            return 1.0;
+        }
+        else{
+            return finalConfidence;
+        }
+        
     }
     
     public void goBackToStart()

@@ -36,7 +36,7 @@ public class OvalRaceGUI extends RaceGUI{
             racePanel.add(emptyLane);
         }
 
-        JLabel weatherLabel=new JLabel("Weather:"+race.getWeather().getName());
+        JLabel weatherLabel=new JLabel("Weather:"+race.getWeather().toString());
         weatherLabel.setFont(new Font("SansSerif", Font.PLAIN, 15));
         weatherLabel.setSize(raceWidth+150, 25);
         weatherLabel.setLocation(25,25);

@@ -33,7 +33,7 @@ public class StraightRaceGUI extends RaceGUI{
             racePanel.add(new JLabel(""));
         }
 
-        JLabel weatherLabel=new JLabel("Weather:"+race.getWeather().getName());
+        JLabel weatherLabel=new JLabel("Weather:"+race.getWeather().toString());
         racePanel.add(weatherLabel);
         raceFrame.add(racePanel);
         raceFrame.setVisible(true);
