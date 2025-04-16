@@ -10,7 +10,7 @@ public class StraightLanePanel extends LanePanel {
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        g.drawRect(0,0, (raceLength*25+25)-1, getHeight()-1); //borders of the lane
+        g.drawRect(0,0, ((raceLength+1)*25)-1, getHeight()-1); //borders of the lane
         g.drawLine(raceLength*25,0,raceLength*25,25);
 
         if(this.horse!= null){

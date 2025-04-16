@@ -1,14 +1,15 @@
 //anything that can affect horse performance
-abstract class Hazard {
-    private int speedModifier;
+// 1m/s = 1 movement/second
+abstract class RaceCondition {
+    private double speedModifier;
     private double fallingModifier;
 
-    public Hazard(int speedModifier, double fallingModifier) {
+    public RaceCondition(double speedModifier, double fallingModifier) {
         this.speedModifier = speedModifier;
         this.fallingModifier = fallingModifier;
     }
 
-    public int getSpeedModifier(){
+    public double getSpeedModifier(){
         return speedModifier;
     }
     public double getFallingModifier(){

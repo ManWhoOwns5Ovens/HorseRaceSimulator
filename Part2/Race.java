@@ -19,7 +19,7 @@ public class Race
 
     private ArrayList<Horse> horses;
 
-    private Timer timer;
+    private Timer[] horseTimers;
    
     /**
      * Constructor for objects of class Race
@@ -112,34 +112,33 @@ public class Race
     {
         instance=this;
         ArrayList<Horse> winners=new ArrayList<>();//number of horses in a tie can differ
-            
+
         resetHorses();
+        horseTimers=new Timer[horses.size()];
 
-        //RaceGUI.createFrame(this);
-
-        timer= new Timer(100+this.weather.getSpeedModifier(), e->{
-            //move each horse
-            for (int i=0; i<horses.size();i++){
-                moveHorse(horses.get(i));
-            }
-            
-            //check for and record winners
-            for(int i=0; i<horses.size();i++){
-                if(raceWonBy(horses.get(i))){ //check every land at the end of a state
-                    winners.add(horses.get(i));
-                    updateHorseConfidence(horses.get(i), true);//increase confidence of winner
+        for(int i=0; i<horses.size();i++){
+            Horse currentHorse=horses.get(i);
+            horseTimers[i]=new Timer(currentHorse.getMovementInterval(this.weather), e->{
+                moveHorse(currentHorse);
+                if(raceWonBy(currentHorse)){ //check every land at the end of a state
+                    winners.add(currentHorse);
+                    updateHorseConfidence(currentHorse, true);//increase confidence of winner
                 }
-            }
-
-            //if race has ended (there are winners, or all horses have fallen)
-            if(!winners.isEmpty() || !canRaceContinue()){
-                timer.stop(); //stop the timer
-                RaceSettingsGUI.raceEnd(winners);
-            }
-        });
-        timer.start(); //start the timer to move the horses
+                //if race has ended (there are winners, or all horses have fallen)
+                if(!winners.isEmpty() || !canRaceContinue()){
+                    stopAllTimers(); //stop the timer
+                    RaceSettingsGUI.raceEnd(winners);
+                }
+            });
+            horseTimers[i].start(); //start the timer to move the horses
+        }
     }
 
+    private void stopAllTimers(){
+        for(Timer timer: horseTimers){
+            timer.stop();
+        }
+    }
     
     /**
      * Randomly make a horse move forward or fall depending

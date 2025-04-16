@@ -9,15 +9,14 @@ public class StraightRaceGUI extends RaceGUI{
 
     @Override
     public void createRacePanel(){
-        JPanel racePanel= new JPanel();
-
         raceWidth=raceLength*25;
         raceHeight=(laneCount+1)*25;
 
         raceFrame.setSize(raceWidth+375, raceHeight+200);
+
+        JPanel racePanel= new JPanel();
         racePanel.setLayout(new GridLayout(laneCount+1,2));
         racePanel.setLocation(25,50);
-
         racePanel.setSize(raceWidth + 350, raceHeight);
 
         ArrayList<Horse> horses=race.getHorses();
@@ -36,9 +35,7 @@ public class StraightRaceGUI extends RaceGUI{
 
         JLabel weatherLabel=new JLabel("Weather:"+race.getWeather().getName());
         racePanel.add(weatherLabel);
-
         raceFrame.add(racePanel);
-
         raceFrame.setVisible(true);
         startTimer();
     }

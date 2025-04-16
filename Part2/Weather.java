@@ -1,11 +1,11 @@
 
 import java.awt.Color;
 
-public class Weather extends Hazard{
+public class Weather extends RaceCondition{
     private String weatherName;
     private Color color;
 
-    public Weather(int speedModifier, double fallingModifier, String weatherName,Color color) {
+    public Weather(double speedModifier, double fallingModifier, String weatherName,Color color) {
         super(speedModifier, fallingModifier);
         this.weatherName = weatherName;
         this.color = color;

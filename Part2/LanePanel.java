@@ -36,4 +36,8 @@ public class LanePanel extends JPanel {
         }
     }
 
+    protected Horse getHorse(){
+        return this.horse;
+    }
+
 }

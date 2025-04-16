@@ -10,12 +10,12 @@ public class OvalRaceGUI extends RaceGUI{
 
     @Override
     public void createRacePanel(){
-        JPanel racePanel= new JPanel();
-
         raceWidth=raceLength*25 + laneCount*50;
         raceHeight=raceLength*25/2 + laneCount*50;
-
         raceFrame.setSize(raceWidth+150, raceHeight+400);
+
+        JPanel racePanel= new JPanel();
+
         racePanel.setLayout(null);
         racePanel.setLocation(25,50);
         racePanel.setSize(raceWidth+100,raceHeight+100);
@@ -40,10 +40,9 @@ public class OvalRaceGUI extends RaceGUI{
         weatherLabel.setFont(new Font("SansSerif", Font.PLAIN, 15));
         weatherLabel.setSize(raceWidth+150, 25);
         weatherLabel.setLocation(25,25);
+        
         racePanel.add(weatherLabel);
-
         raceFrame.add(racePanel);
-
         raceFrame.setVisible(true);
         startTimer();
     }

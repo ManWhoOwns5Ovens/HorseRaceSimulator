@@ -1,5 +1,8 @@
 
 public class App {
+
+    public static final int interval = 100;
+    
     public static void main(String[] a){
         RaceSettingsGUI.createFrame();
     }

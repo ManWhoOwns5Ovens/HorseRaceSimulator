@@ -14,7 +14,7 @@ abstract class RaceGUI {
     protected int raceWidth;
     protected int raceHeight;
 
-    protected Timer timer;
+    protected Timer[] horseGUITimers;
 
     protected ArrayList<LanePanel> lanes;
 
@@ -26,6 +26,7 @@ abstract class RaceGUI {
         this.raceWidth=0;
         this.raceHeight=0;
         this.lanes=new ArrayList();
+        this.horseGUITimers= new Timer[0];
     }
 
     public void createFrame(){
@@ -38,16 +39,24 @@ abstract class RaceGUI {
     protected void createRacePanel(){} //to be overriden
 
     protected void startTimer(){
-        timer = new Timer(100+race.getWeather().getSpeedModifier(), e -> {
-            for(LanePanel lane: lanes){
-                lane.updateLane();
-            }
-        });
-        timer.start();
+        horseGUITimers=new Timer[lanes.size()];
+        for(int i=0;i<lanes.size();i++){
+            LanePanel currentLane=lanes.get(i);
+            horseGUITimers[i]=new Timer(lanes.get(i).getHorse().getMovementInterval(race.getWeather()), e->{
+                currentLane.updateLane();
+            });
+            horseGUITimers[i].start();
+        }
+    }
+
+    protected void stopAllTimers(){
+        for(Timer timer: horseGUITimers){
+            timer.stop();
+        }
     }
 
     public void raceEnd(ArrayList<Horse> winners){
-        timer.stop();
+        stopAllTimers();
         if(winners.size()==0){
             for(LanePanel lane: lanes){
                 lane.updateLane();

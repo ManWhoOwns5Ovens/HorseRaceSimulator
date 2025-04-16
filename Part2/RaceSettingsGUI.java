@@ -19,7 +19,7 @@ public class RaceSettingsGUI {
         gbc.gridy = 0;    
         gbc.gridx = 0;
         gbc.weightx = 0.67;
-        settingsFrame.add(Box.createHorizontalStrut(100), gbc); 
+        settingsFrame.add(createHorseConfig(), gbc); 
     
         gbc.gridx = 1;
         gbc.weightx = 0.33;
@@ -28,17 +28,28 @@ public class RaceSettingsGUI {
     
         settingsFrame.setVisible(true);
     }
-    
 
+    private static JScrollPane createHorseConfig(){
+        JPanel configPanel= new JPanel();
+        configPanel.setLayout(new GridLayout(13,1));
+
+        for (int i=0; i<3; i++){
+            JPanel horseConfigPanel=new JPanel();
+            horseConfigPanel.setLayout(new GridBagLayout());
+        }
+
+        JScrollPane horseConfigScroll= new JScrollPane(configPanel);
+        return horseConfigScroll;
+    }
+    
     private static JPanel createRaceSettingsPanel() {
-        
         JSpinner raceLengthSpinner = createRaceLengthSpinner();
         JSpinner lanesCountSpinner = createLaneCountSpinner();
         JComboBox laneTypeList = createLaneTypeList();
 
-        HashMap<String,Weather> weatherMap = new HashMap<>();
+        final HashMap<String,Weather> weatherMap = new HashMap<>();
         weatherMap.put("Sunny", new Weather( 0, 1.0,"Sunny", Color.YELLOW));
-        weatherMap.put("Rainy", new Weather( 200, 1.0,"Rainy", Color.CYAN));
+        weatherMap.put("Rainy", new Weather( -1.0, 1.0,"Rainy", Color.CYAN));
         weatherMap.put("Snowy", new Weather( 0, 2.0,"Snowy", Color.WHITE));
         JComboBox weatherList = createWeatherList(weatherMap.keySet().toArray());
 
@@ -90,9 +101,9 @@ public class RaceSettingsGUI {
 
     private static void createRace(int raceLength, int laneCount, LaneType laneType, Weather weather) {
         Race race= new Race(raceLength,laneCount,laneType,weather);
-        race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6));
-        race.addHorse(new Horse('♞', "KOKOMO", 0.5));
-        race.addHorse(new Horse('♛', "EL JEFE", 0.4));
+        race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6,4.0,20));
+        race.addHorse(new Horse('♞', "KOKOMO", 0.5 , 3.0, 20));
+        race.addHorse(new Horse('♛', "EL JEFE", 0.4, 5.0, 20));
 
         settingsFrame.dispose();
 
