@@ -17,9 +17,7 @@ public class Race
     private LaneType laneType;
     private Weather weather;
 
-    private Horse lane1Horse;
-    private Horse lane2Horse;
-    private Horse lane3Horse;
+    private ArrayList<Horse> horses;
 
     private Timer timer;
    
@@ -32,14 +30,10 @@ public class Race
     public Race(int distance, int laneCount,LaneType laneType, Weather weather)
     {
         if(instance==null){
-            lane1Horse = null;
-            lane2Horse = null;
-            lane3Horse = null;
+            this.horses= new ArrayList<>();
         }
         else{
-            lane1Horse = instance.getLane1Horse();
-            lane2Horse = instance.getLane2Horse();
-            lane3Horse = instance.getLane3Horse();
+            this.horses= instance.getHorses();
         }
         // initialise instance variables
         setRaceLength(distance);
@@ -92,14 +86,8 @@ public class Race
     public Weather getWeather(){
         return this.weather;
     }
-    public Horse getLane1Horse(){
-        return this.lane1Horse;
-    }
-    public Horse getLane2Horse(){
-        return this.lane2Horse;
-    }
-    public Horse getLane3Horse(){
-        return this.lane3Horse;
+    public ArrayList<Horse> getHorses(){
+        return this.horses;
     }
     
     /**
@@ -108,20 +96,11 @@ public class Race
      * @param theHorse the horse to be added to the race
      * @param laneNumber the lane that the horse will be added to
      */
-    public void addHorse(Horse theHorse, int laneNumber)
+    public void addHorse(Horse theHorse)
     {
         if(instance==null){
-            if (laneNumber == 1){
-                lane1Horse = theHorse;
-            }
-            else if (laneNumber == 2){
-                lane2Horse = theHorse;
-            }
-            else if (laneNumber == 3){
-                lane3Horse = theHorse;
-            }
-        }
-        
+            this.horses.add(theHorse);
+        }   
     }
     
     /**
@@ -132,29 +111,28 @@ public class Race
     public void startRace()
     {
         instance=this;
-        Horse[] horseArr= {lane1Horse,lane2Horse,lane3Horse}; //keep refrences to objects in one place to avoid repetitive code by iterating through array
         ArrayList<Horse> winners=new ArrayList<>();//number of horses in a tie can differ
             
-        resetHorses(horseArr);
+        resetHorses();
 
         //RaceGUI.createFrame(this);
 
         timer= new Timer(100+this.weather.getSpeedModifier(), e->{
             //move each horse
-            for (int i=0; i<horseArr.length;i++){
-                moveHorse(horseArr[i]);
+            for (int i=0; i<horses.size();i++){
+                moveHorse(horses.get(i));
             }
             
             //check for and record winners
-            for(int i=0; i<horseArr.length;i++){
-                if(raceWonBy(horseArr[i])){ //check every land at the end of a state
-                    winners.add(horseArr[i]);
-                    updateHorseConfidence(horseArr[i], true);//increase confidence of winner
+            for(int i=0; i<horses.size();i++){
+                if(raceWonBy(horses.get(i))){ //check every land at the end of a state
+                    winners.add(horses.get(i));
+                    updateHorseConfidence(horses.get(i), true);//increase confidence of winner
                 }
             }
 
             //if race has ended (there are winners, or all horses have fallen)
-            if(!winners.isEmpty() || !canRaceContinue(horseArr)){
+            if(!winners.isEmpty() || !canRaceContinue()){
                 timer.stop(); //stop the timer
                 RaceSettingsGUI.raceEnd(winners);
             }
@@ -216,14 +194,14 @@ public class Race
     *
     *@param horses contains refrences to all horse objects
      */
-    private boolean canRaceContinue(Horse[] horses){
+    private boolean canRaceContinue(){
         int fallenHorses=0;
-        for (int i=0; i<horses.length;i++){
-            if (horses[i].hasFallen()){
+        for (int i=0; i<horses.size();i++){
+            if (horses.get(i).hasFallen()){
                 fallenHorses++; 
             }  
         }
-        if(fallenHorses>=horses.length){
+        if(fallenHorses>=horses.size()){
             return false;
         }
         return true;
@@ -234,10 +212,10 @@ public class Race
      * 
      * @param horseArr array holding refrences to every horse object
      */
-    private void resetHorses(Horse[] horseArr){
+    private void resetHorses(){
         //reset all the lanes (all horses not fallen and back to 0). 
-        for (int i=0; i<horseArr.length;i++){
-            horseArr[i].goBackToStart();
+        for (int i=0; i<horses.size();i++){
+            horses.get(i).goBackToStart();
         }
     }
 

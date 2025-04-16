@@ -37,9 +37,9 @@ public class RaceSettingsGUI {
         JComboBox laneTypeList = createLaneTypeList();
 
         HashMap<String,Weather> weatherMap = new HashMap<>();
-        weatherMap.put("Sunny", new Weather("Sunny", 0, 1.0, Color.YELLOW));
-        weatherMap.put("Rainy", new Weather("Rainy", 200, 1.0, Color.CYAN));
-        weatherMap.put("Snowy", new Weather("Snowy", 0, 2.0, Color.WHITE));
+        weatherMap.put("Sunny", new Weather( 0, 1.0,"Sunny", Color.YELLOW));
+        weatherMap.put("Rainy", new Weather( 200, 1.0,"Rainy", Color.CYAN));
+        weatherMap.put("Snowy", new Weather( 0, 2.0,"Snowy", Color.WHITE));
         JComboBox weatherList = createWeatherList(weatherMap.keySet().toArray());
 
         JPanel panel = new JPanel(new GridLayout(5, 2));
@@ -90,9 +90,9 @@ public class RaceSettingsGUI {
 
     private static void createRace(int raceLength, int laneCount, LaneType laneType, Weather weather) {
         Race race= new Race(raceLength,laneCount,laneType,weather);
-        race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 1.0), 1);
-        race.addHorse(new Horse('♞', "KOKOMO", 0.5), 2);
-        race.addHorse(new Horse('♛', "EL JEFE", 0.4), 3);
+        race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6));
+        race.addHorse(new Horse('♞', "KOKOMO", 0.5));
+        race.addHorse(new Horse('♛', "EL JEFE", 0.4));
 
         settingsFrame.dispose();
 

@@ -17,8 +17,8 @@ public class StraightLanePanel extends LanePanel {
             g.setFont(new Font("SansSerif", Font.PLAIN, 15));
             g.drawString(this.symbol+"", horse.getDistanceTravelled()*25, 17); //examine
 
-            g.setFont(new Font("SansSerif", Font.PLAIN, 10));
-            g.drawString(horse.getName()+" (Current confidence "+horse.getConfidence()+")",25*raceLength+35, 15);
+            //g.setFont(new Font("SansSerif", Font.PLAIN, 10));
+            //g.drawString(horse.getName()+" (Current confidence "+horse.getConfidence()+")",25*raceLength+35, 15);
         }
         
     }

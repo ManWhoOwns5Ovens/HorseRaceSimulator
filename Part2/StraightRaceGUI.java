@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class StraightRaceGUI extends RaceGUI{
@@ -13,27 +14,24 @@ public class StraightRaceGUI extends RaceGUI{
         raceWidth=raceLength*25;
         raceHeight=(laneCount+1)*25;
 
-        raceFrame.setSize(raceWidth+350, raceHeight+200);
-        racePanel.setLayout(new GridLayout(laneCount+1,1));
+        raceFrame.setSize(raceWidth+375, raceHeight+200);
+        racePanel.setLayout(new GridLayout(laneCount+1,2));
         racePanel.setLocation(25,50);
 
         racePanel.setSize(raceWidth + 350, raceHeight);
 
-        StraightLanePanel lanePanel1= new StraightLanePanel(race.getLane1Horse(), raceLength);
-        racePanel.add(lanePanel1);
-        lanes.add(lanePanel1);
-
-        StraightLanePanel lanePanel2= new StraightLanePanel(race.getLane2Horse(), raceLength);
-        racePanel.add(lanePanel2);
-        lanes.add(lanePanel2);
-
-        StraightLanePanel lanePanel3= new StraightLanePanel(race.getLane3Horse(), raceLength);
-        racePanel.add(lanePanel3);
-        lanes.add(lanePanel3);
+        ArrayList<Horse> horses=race.getHorses();
+        for(Horse theHorse : horses){
+            StraightLanePanel newHorseLane= new StraightLanePanel(theHorse, raceLength);
+            racePanel.add(newHorseLane);
+            racePanel.add(new JLabel(theHorse.getName()+" (Current confidence "+theHorse.getConfidence()+")"));
+            lanes.add(newHorseLane);
+        }
 
         for(int i=3; i<laneCount;i++){
             StraightLanePanel emptyLane= new StraightLanePanel(null, raceLength);
             racePanel.add(emptyLane);
+            racePanel.add(new JLabel(""));
         }
 
         JLabel weatherLabel=new JLabel("Weather:"+race.getWeather().getName());
@@ -44,4 +42,5 @@ public class StraightRaceGUI extends RaceGUI{
         raceFrame.setVisible(true);
         startTimer();
     }
+
 }

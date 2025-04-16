@@ -35,7 +35,7 @@ abstract class RaceGUI {
         createRacePanel();
     }
 
-    protected void createRacePanel(){}
+    protected void createRacePanel(){} //to be overriden
 
     protected void startTimer(){
         timer = new Timer(100+race.getWeather().getSpeedModifier(), e -> {
@@ -64,19 +64,19 @@ abstract class RaceGUI {
         raceFrame.setVisible(true);
     }
 
+
     protected JPanel createResultsPanel(String displayMessage){
         JPanel resultsPanel= new JPanel();
         resultsPanel.setLayout(new GridBagLayout());
         resultsPanel.setSize(raceWidth+200, 100);
 
-        if(race.getLaneType()==LaneType.OVAL){
-            resultsPanel.setLocation(25, raceHeight+150);
+        if(this instanceof OvalRaceGUI){
+            resultsPanel.setLocation(0, raceHeight+150);
         }
         else{
-            resultsPanel.setLocation(25, 50+raceHeight);
+            resultsPanel.setLocation(25, raceHeight+50);
         }
         
-
         GridBagConstraints gbc= new GridBagConstraints();
 
         JLabel messageLabel=createResultsFinalMessage(displayMessage);
@@ -96,7 +96,6 @@ abstract class RaceGUI {
         gbc.anchor = GridBagConstraints.CENTER; 
         resultsPanel.add(yesButton,gbc);
 
-        
         JButton noButton= createNoButton();
         gbc.gridx=1;
         resultsPanel.add(noButton,gbc);

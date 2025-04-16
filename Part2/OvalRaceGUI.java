@@ -1,6 +1,6 @@
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
-
 
 public class OvalRaceGUI extends RaceGUI{
 
@@ -20,25 +20,16 @@ public class OvalRaceGUI extends RaceGUI{
         racePanel.setLocation(25,50);
         racePanel.setSize(raceWidth+100,raceHeight+100);
 
-        OvalLanePanel lanePanel1= new OvalLanePanel(race.getLane1Horse(), raceLength,(laneCount-0),0);
-        lanePanel1.setSize(raceWidth,raceHeight);
-        lanePanel1.setLocation(25,50);
-        racePanel.add(lanePanel1);
-        lanes.add(lanePanel1);
+        ArrayList<Horse> horses=race.getHorses();
+        for(int i=0; i<horses.size();i++){
+            OvalLanePanel newHorseLane= new OvalLanePanel(horses.get(i), raceLength,(laneCount-i),i);
+            newHorseLane.setSize(raceWidth,raceHeight);
+            newHorseLane.setLocation(25,50);
+            racePanel.add(newHorseLane);
+            lanes.add(newHorseLane);
+        }
 
-        OvalLanePanel lanePanel2= new OvalLanePanel(race.getLane2Horse(), raceLength,(laneCount-1),1);
-        lanePanel2.setSize(raceWidth,raceHeight);
-        lanePanel2.setLocation(25,50);
-        racePanel.add(lanePanel2);
-        lanes.add(lanePanel2); 
-
-        OvalLanePanel lanePanel3= new OvalLanePanel(race.getLane3Horse(), raceLength,(laneCount-2),2);
-        lanePanel3.setSize(raceWidth,raceHeight);
-        lanePanel3.setLocation(25,50);
-        racePanel.add(lanePanel3);
-        lanes.add(lanePanel3); 
-
-        for(int i=3; i<laneCount;i++){
+        for(int i=horses.size(); i<laneCount;i++){
             OvalLanePanel emptyLane= new OvalLanePanel(null, raceLength,(laneCount-i),i);
             emptyLane.setSize(raceWidth,raceHeight);
             emptyLane.setLocation(25,50);
