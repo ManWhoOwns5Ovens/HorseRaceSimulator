@@ -1,7 +1,6 @@
 import java.awt.*;
 
 public class OvalLanePanel extends LanePanel {
-
     private int offset;
     private int laneNumber;
 
@@ -39,7 +38,7 @@ public class OvalLanePanel extends LanePanel {
         double angle=2 * Math.PI * f;
         int radius= (raceLength*25 + laneNumber*50)/2+7;
 
-        return (int)(25*offset+radius+radius*Math.sin(angle));
+        return (int)(25*offset+radius+(radius+5)*Math.sin(angle));
     }
 
     private int getHorseY(){
@@ -47,7 +46,7 @@ public class OvalLanePanel extends LanePanel {
         double angle=2 * Math.PI * f;
         int radius= (raceLength*25/2 + laneNumber*50)/2+7;
 
-        return (int)(25*offset+radius+ radius * Math.cos(angle));
+        return (int)(25*offset+radius+ (radius+5) * Math.cos(angle));
     }
 
 }

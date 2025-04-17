@@ -15,26 +15,47 @@ public class StraightRaceGUI extends RaceGUI{
         raceFrame.setSize(raceWidth+375, raceHeight+200);
 
         JPanel racePanel= new JPanel();
-        racePanel.setLayout(new GridLayout(laneCount+1,2));
+        racePanel.setLayout(new GridBagLayout());
         racePanel.setLocation(25,50);
         racePanel.setSize(raceWidth + 350, raceHeight);
 
         ArrayList<Horse> horses=race.getHorses();
-        for(Horse theHorse : horses){
+        GridBagConstraints gbc= new GridBagConstraints();
+        gbc.fill= GridBagConstraints.BOTH;
+
+        for(int i = 0; i < horses.size(); i++){
+            Horse theHorse= horses.get(i);
+
+            gbc.gridx=0;
+            gbc.gridy=i;
+            gbc.weightx=1.0;
+            gbc.weighty = 1.0;
             StraightLanePanel newHorseLane= new StraightLanePanel(theHorse, raceLength);
-            racePanel.add(newHorseLane);
-            racePanel.add(new JLabel(theHorse.getName()+" (Current confidence "+theHorse.getConfidence()+")"));
+            newHorseLane.setPreferredSize(new Dimension(raceWidth+25, 15)); 
+            racePanel.add(newHorseLane,gbc);
+
+            gbc.gridx = 1;
+            racePanel.add(new JLabel(theHorse.getName()+" (Current confidence "+theHorse.getConfidence()+")"),gbc);
             lanes.add(newHorseLane);
         }
 
-        for(int i=3; i<laneCount;i++){
+        for (int i = horses.size(); i < laneCount; i++) {
+            gbc.gridx = 0;
+            gbc.gridy = i;
             StraightLanePanel emptyLane= new StraightLanePanel(null, raceLength);
-            racePanel.add(emptyLane);
-            racePanel.add(new JLabel(""));
+            emptyLane.setPreferredSize(new Dimension(raceWidth+25, 15));
+            racePanel.add(emptyLane, gbc);
+    
+            gbc.gridx = 1;
+            racePanel.add(new JLabel(""), gbc);
         }
 
-        JLabel weatherLabel=new JLabel("Weather:"+race.getWeather().toString());
-        racePanel.add(weatherLabel);
+        gbc.gridx = 0;
+        gbc.gridy = laneCount;
+        gbc.gridwidth = 2;
+        JLabel weatherLabel = new JLabel("Weather: " + race.getWeather().toString());
+        racePanel.add(weatherLabel, gbc);
+
         raceFrame.add(racePanel);
         raceFrame.setVisible(true);
         startTimer();
