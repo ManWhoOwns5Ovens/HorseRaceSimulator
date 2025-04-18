@@ -1,4 +1,7 @@
 
+import java.awt.Color;
+
+
 /**
  * Class that represents a horse in the simulator. Each attribute/stat impacts how the horse looks, behaves and performs in the simulator.
  * This class is the core data model for each horse competitor in the race.
@@ -20,24 +23,35 @@ public class Horse
 
     private Breed horseBreed;
     private Saddle horseSaddle;
+    private Horseshoes horseshoes;
+    private Accessory horseAccessory;
+
+    private Color horseCoat;
       
     //Constructor of class Horse
     /**
      * Constructor for objects of class Horse
      */
-    public Horse(char horseSymbol, String horseName, double horseConfidence, double horseSpeed, int horseEndurance, Breed horseBreed, Saddle horseSaddle)
+    public Horse(char horseSymbol, String horseName, double horseConfidence, double horseSpeed, Breed horseBreed, Saddle horseSaddle, 
+    Horseshoes horseshoes, Accessory horseAccessory, Color horseCoat)
     {
         this.horseName = horseName;
         this.horseSymbol = horseSymbol;
         this.distanceTravelled = 0;
         this.fallen = false;
         setConfidence(horseConfidence);
+
         setSpeed(horseSpeed);
-        setEndurance(horseEndurance);
+        this.horseEndurance=1;
+
         this.horseBreed=horseBreed;
         this.horseSaddle=horseSaddle;
+        this.horseshoes=horseshoes;
+        this.horseAccessory=horseAccessory;
+
+        this.horseCoat=horseCoat;
     }
-    
+
     //Other methods of class Horse
     public void fall()
     {
@@ -48,12 +62,10 @@ public class Horse
     {
         return this.horseConfidence;
     }
-    
     public int getDistanceTravelled()
     {
         return this.distanceTravelled;
     }
-    
     public String getName()
     {
         return this.horseName;
@@ -68,32 +80,59 @@ public class Horse
     public int getEndurance(){
         return this.horseEndurance;
     }
+    public Color getCoatColor(){
+        return this.horseCoat;
+    }
 
+    //used by Race, returns movement interval after the user has input the weather
+    //takes the final speed
     public int getMovementInterval(Weather raceWeather){
-        double speed=this.horseSpeed+this.horseBreed.getSpeedModifier()+this.horseSaddle.getSpeedModifier()+raceWeather.getSpeedModifier();
-        if(speed<=0.0){
+        double finalSpeed=getFinalSpeed() + raceWeather.getSpeedModifier();
+        if(finalSpeed<=0.0){
             return 10000;
         }
         else{
-            return (int)(1000/speed);
+            return (int)(1000/finalSpeed);
+        }
+    }
+
+    //final= stat after all modifiers from the equipment and breed are applied
+    public double getFinalSpeed(){
+        double finalSpeed=this.horseSpeed
+        +this.horseBreed.getSpeedModifier()
+        +this.horseSaddle.getSpeedModifier()
+        +this.horseshoes.getSpeedModifier()
+        +this.horseAccessory.getSpeedModifier();
+
+        if(finalSpeed<=0.0){
+            return 0.0;
+        }
+        else{
+            return finalSpeed;
         }
     }
 
     public double getFinalConfidence(){
-        double finalConfidence=this.horseConfidence*this.horseBreed.getConfidenceModifier()*this.horseSaddle.getConfidenceModifier();
+        double finalConfidence=this.horseConfidence
+        *this.horseBreed.getConfidenceModifier()
+        *this.horseSaddle.getConfidenceModifier()
+        *this.horseshoes.getConfidenceModifier()
+        *this.horseAccessory.getConfidenceModifier();
+
         if(finalConfidence>1.0){
             return 1.0;
         }
         else{
             return finalConfidence;
         }
-        
     }
+
     
-    public void goBackToStart()
+    public void goBackToStart(int raceLength)
     {
         this.distanceTravelled = 0;
         this.fallen = false;
+        setInitialEndurance(raceLength);
     }
     
     public boolean hasFallen()
@@ -136,13 +175,24 @@ public class Horse
         }
     }
 
-    public final void setEndurance(int newEndurance){
-        if(newEndurance>=10){
-            this.horseEndurance=newEndurance;
-        }
-        else{
+    //endurance scales with the race length
+    public final void setInitialEndurance(int raceLength){
+        int newEndurance=raceLength*2 
+        +this.horseBreed.getEnduranceModifier()
+        +this.horseSaddle.getEnduranceModifier()
+        +this.horseshoes.getEnduranceModifier()
+        +this.horseAccessory.getEnduranceModifier();
+
+        if(newEndurance<=0){
             this.horseEndurance=20;
         }
+        else{
+            this.horseEndurance=newEndurance;
+        }
+    }
+
+    public void changeEndurance(int modifier){
+        this.horseEndurance=this.horseEndurance+modifier;
     }
     
 }

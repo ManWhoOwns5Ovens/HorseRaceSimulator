@@ -6,6 +6,8 @@ public class RaceSettingsGUI {
     private static JFrame settingsFrame;
     private static RaceGUI gui;
 
+    private static ArrayList<HorseConfigPanel> horsePanels= new ArrayList<>();
+
     public static void createFrame() {
         settingsFrame = new JFrame("Race Settings");
         settingsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,7 +44,8 @@ public class RaceSettingsGUI {
         for (int i=0; i<3; i++){
             HorseConfigPanel hcp=new HorseConfigPanel();
             gbc.gridy=i;
-            configPanel.add(hcp,gbc);
+            configPanel.add(hcp,gbc); // add to GUI
+            horsePanels.add(hcp); // keep track off
         }
         JScrollPane horseConfigScroll= new JScrollPane(configPanel);
         return horseConfigScroll;
@@ -103,9 +106,12 @@ public class RaceSettingsGUI {
 
     private static void createRace(int raceLength, int laneCount, LaneType laneType, Weather weather) {
         Race race= new Race(raceLength,laneCount,laneType,weather);
-        //race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6,4.0,20, Breed.ARABIAN));
-        //race.addHorse(new Horse('♞', "KOKOMO", 0.5 , 3.0, 20, Breed.QUARTER_HORSE));
-        //race.addHorse(new Horse('♛', "EL JEFE", 0.4, 7.0, 20,Breed.CLYDESDALE));
+        
+        for(int i=0; i<horsePanels.size();i++){
+            HorseConfigPanel info=horsePanels.get(i);
+            race.addHorse(new Horse(info.getSymbol(),info.getName(),0.5,3.0,info.getBreed(),info.getSaddle(),info.getHorseshoes(),
+            info.getAccessory(),info.getColour()));
+        }
 
         settingsFrame.dispose();
 

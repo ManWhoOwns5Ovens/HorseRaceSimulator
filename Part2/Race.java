@@ -158,11 +158,14 @@ public class Race
             {
                theHorse.moveForward();
             }
+
+            theHorse.changeEndurance(-1);
             
             //the probability that the horse will fall is very small (max is 0.1)
             //but will also will depends exponentially on confidence 
             //so if you double the confidence, the probability that it will fall is *2
-            if (Math.random() < (0.1*theHorse.getFinalConfidence()*theHorse.getFinalConfidence()*weather.getFallingModifier()))
+            //possiblity of horse falling when their endurance reaches 0
+            if (Math.random() < (0.1*theHorse.getFinalConfidence()*theHorse.getFinalConfidence()*weather.getFallingModifier()) || theHorse.getEndurance()<=0)
             {
                 theHorse.fall();
                 updateHorseConfidence(theHorse, false);
@@ -214,7 +217,7 @@ public class Race
     private void resetHorses(){
         //reset all the lanes (all horses not fallen and back to 0). 
         for (int i=0; i<horses.size();i++){
-            horses.get(i).goBackToStart();
+            horses.get(i).goBackToStart(this.raceLength);
         }
     }
 
