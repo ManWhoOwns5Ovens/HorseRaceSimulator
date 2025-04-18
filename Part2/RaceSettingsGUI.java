@@ -32,11 +32,17 @@ public class RaceSettingsGUI {
     private static JScrollPane createHorseConfig(){
         JPanel configPanel= new JPanel();
         configPanel.setSize(800,400);
-        configPanel.setLayout(new GridLayout(4,1));
+        configPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc= new GridBagConstraints();
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        gbc.gridx=0;
+        gbc.weighty=1.0;
+        gbc.ipady=10;
 
         for (int i=0; i<3; i++){
             HorseConfigPanel hcp=new HorseConfigPanel();
-            configPanel.add(hcp.getHorsePanel());
+            gbc.gridy=i;
+            configPanel.add(hcp,gbc);
         }
         JScrollPane horseConfigScroll= new JScrollPane(configPanel);
         return horseConfigScroll;
@@ -50,7 +56,6 @@ public class RaceSettingsGUI {
         JComboBox weatherList = createWeatherList(new Weather[] {Weather.SUNNY,Weather.RAINY,Weather.SNOWY});
 
         JPanel panel = new JPanel(new GridLayout(5, 2));
-        panel.setSize(300,200);
     
         panel.add(new JLabel("Race Length:"));
         panel.add(raceLengthSpinner);
@@ -98,9 +103,9 @@ public class RaceSettingsGUI {
 
     private static void createRace(int raceLength, int laneCount, LaneType laneType, Weather weather) {
         Race race= new Race(raceLength,laneCount,laneType,weather);
-        race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6,4.0,20, Breed.ARABIAN));
-        race.addHorse(new Horse('♞', "KOKOMO", 0.5 , 3.0, 20, Breed.QUARTER_HORSE));
-        race.addHorse(new Horse('♛', "EL JEFE", 0.4, 7.0, 20,Breed.CLYDESDALE));
+        //race.addHorse(new Horse('♘', "PIPPI LONGSTOCKING", 0.6,4.0,20, Breed.ARABIAN));
+        //race.addHorse(new Horse('♞', "KOKOMO", 0.5 , 3.0, 20, Breed.QUARTER_HORSE));
+        //race.addHorse(new Horse('♛', "EL JEFE", 0.4, 7.0, 20,Breed.CLYDESDALE));
 
         settingsFrame.dispose();
 

@@ -1,6 +1,7 @@
 
 /**
- * Write a description of class Horse here.
+ * Class that represents a horse in the simulator. Each attribute/stat impacts how the horse looks, behaves and performs in the simulator.
+ * This class is the core data model for each horse competitor in the race.
  * 
  * @author David Valsan
  * @version 1.1
@@ -18,12 +19,13 @@ public class Horse
     private int horseEndurance;
 
     private Breed horseBreed;
+    private Saddle horseSaddle;
       
     //Constructor of class Horse
     /**
      * Constructor for objects of class Horse
      */
-    public Horse(char horseSymbol, String horseName, double horseConfidence, double horseSpeed, int horseEndurance, Breed horseBreed)
+    public Horse(char horseSymbol, String horseName, double horseConfidence, double horseSpeed, int horseEndurance, Breed horseBreed, Saddle horseSaddle)
     {
         this.horseName = horseName;
         this.horseSymbol = horseSymbol;
@@ -33,6 +35,7 @@ public class Horse
         setSpeed(horseSpeed);
         setEndurance(horseEndurance);
         this.horseBreed=horseBreed;
+        this.horseSaddle=horseSaddle;
     }
     
     //Other methods of class Horse
@@ -67,7 +70,7 @@ public class Horse
     }
 
     public int getMovementInterval(Weather raceWeather){
-        double speed=this.horseSpeed+this.horseBreed.getSpeedModifier()+raceWeather.getSpeedModifier();
+        double speed=this.horseSpeed+this.horseBreed.getSpeedModifier()+this.horseSaddle.getSpeedModifier()+raceWeather.getSpeedModifier();
         if(speed<=0.0){
             return 10000;
         }
@@ -77,7 +80,7 @@ public class Horse
     }
 
     public double getFinalConfidence(){
-        double finalConfidence=this.horseConfidence*this.horseBreed.getConfidenceModifier();
+        double finalConfidence=this.horseConfidence*this.horseBreed.getConfidenceModifier()*this.horseSaddle.getConfidenceModifier();
         if(finalConfidence>1.0){
             return 1.0;
         }

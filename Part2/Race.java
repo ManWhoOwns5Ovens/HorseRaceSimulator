@@ -218,8 +218,6 @@ public class Race
         }
     }
 
-    
-
     /**
      * Modify a horse's confidence rating
      * 
