@@ -171,20 +171,22 @@ public class Horse
             this.horseSpeed=newSpeed;
         }
         else{
-            this.horseSpeed=0.33;
+            this.horseSpeed=0.0001;
         }
     }
 
     //endurance scales with the race length
     public final void setInitialEndurance(int raceLength){
-        int newEndurance=raceLength*2 
+        int newEndurance=raceLength
         +this.horseBreed.getEnduranceModifier()
         +this.horseSaddle.getEnduranceModifier()
         +this.horseshoes.getEnduranceModifier()
         +this.horseAccessory.getEnduranceModifier();
 
+        newEndurance*=5;
+
         if(newEndurance<=0){
-            this.horseEndurance=20;
+            this.horseEndurance=1;
         }
         else{
             this.horseEndurance=newEndurance;

@@ -4,7 +4,7 @@ import javax.swing.*;
 public class HorseConfigPanel extends JPanel{
     private JTextField nameInput;
     private JComboBox symbolInput;
-    private JComboBox colourInput;
+    private Color colourInput;
     private JComboBox breedInput;
     private JComboBox saddleInput;
     private JComboBox horseshoesInput;
@@ -79,16 +79,18 @@ public class HorseConfigPanel extends JPanel{
 
         gbc.gridx=2;
         gbc.gridy=1;
-        finalConfidenceLabel=new JLabel(this.calculateConfidence()+"");
+        finalConfidenceLabel=new JLabel("");
         this.add(finalConfidenceLabel,gbc);
 
         gbc.gridy=2;
-        finalSpeedLabel=new JLabel(this.calculateSpeed()+"");
+        finalSpeedLabel=new JLabel("");
         this.add(finalSpeedLabel,gbc);
 
         gbc.gridy=3;
-        finalEnduraceLabel=new JLabel(this.calculateEndurance()+"");
+        finalEnduraceLabel=new JLabel("");
         this.add(finalEnduraceLabel,gbc);
+
+        this.updateLabels();//calculates updates final label values to rounded values initially
     }
 
     private void createComboBoxes(){
@@ -102,12 +104,17 @@ public class HorseConfigPanel extends JPanel{
         breedInput.addActionListener(e -> updateLabels());
 
         gbc.gridy=1;
-        symbolInput=createComboBox(new String[]{"♘","♞","🐎","🏇","🦄"});
+        symbolInput=createComboBox(new String[]{"♘","♞","♔","♕","♖","♗", "♙","♚", "♛","♜","♝","♟"});
+        symbolInput.setEditable(true);
         this.add(symbolInput,gbc);
 
         gbc.gridy=2;
-        colourInput=createComboBox(new String[]{"BLACK","GRAY","WHITE","DARK_GRAY"});
-        this.add(colourInput,gbc);
+        JButton colourPickerButton = new JButton("Pick Color");//shows/hides color chooser
+        colourPickerButton.addActionListener(e -> {
+            Color selected = JColorChooser.showDialog(this, "Choose Horse Color", Color.BLACK);//returns selected color, opens color chooser UI in new window
+            colourInput=selected;
+        });
+        this.add(colourPickerButton,gbc);
 
         gbc.gridx=6;
         gbc.gridy=0;
@@ -141,7 +148,7 @@ public class HorseConfigPanel extends JPanel{
     }
     
     public Color getColour() {
-        return Color.getColor(colourInput.getSelectedItem().toString());
+        return colourInput;
     }
     
     public Breed getBreed() {
@@ -161,18 +168,34 @@ public class HorseConfigPanel extends JPanel{
     }
 
     private double calculateConfidence(){
-        return 0.5 * this.getBreed().getConfidenceModifier() * this.getSaddle().getConfidenceModifier() * this.getHorseshoes().getConfidenceModifier() 
+        double confidence= 0.5 * this.getBreed().getConfidenceModifier() * this.getSaddle().getConfidenceModifier() * this.getHorseshoes().getConfidenceModifier() 
         * this.getAccessory().getConfidenceModifier();
+        if (confidence>1.0){
+            return 1.0;
+        }
+        else if (confidence<=0.0){
+            return 0.01;
+        }
+        return confidence;
     }
 
     private double calculateSpeed(){
-        return 3.0 + this.getBreed().getSpeedModifier() + this.getSaddle().getSpeedModifier() + this.getHorseshoes().getSpeedModifier() 
+        double speed = 3.0 + this.getBreed().getSpeedModifier() + this.getSaddle().getSpeedModifier() + this.getHorseshoes().getSpeedModifier() 
         + this.getAccessory().getSpeedModifier();
+        if(speed<=0.0){
+            return 0.0001;
+        }
+        return speed;
     }
 
     private int calculateEndurance(){
-        return 20 + this.getBreed().getEnduranceModifier() + this.getSaddle().getEnduranceModifier() + this.getHorseshoes().getEnduranceModifier() 
+        int endurance = 20 + this.getBreed().getEnduranceModifier() + this.getSaddle().getEnduranceModifier() + this.getHorseshoes().getEnduranceModifier() 
         + this.getAccessory().getEnduranceModifier();
+        System.out.println(endurance);
+        if(endurance<=0){
+            return 1;
+        }
+        return endurance;
     }
 
     private void updateLabels(){

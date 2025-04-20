@@ -111,6 +111,9 @@ public class RaceSettingsGUI {
             HorseConfigPanel info=horsePanels.get(i);
             race.addHorse(new Horse(info.getSymbol(),info.getName(),0.5,3.0,info.getBreed(),info.getSaddle(),info.getHorseshoes(),
             info.getAccessory(),info.getColour()));
+
+            System.out.println(info.getSymbol()+" "+info.getName()+" "+0.5+" "+3.0+" "+info.getBreed()+" "+info.getSaddle()+" "+info.getHorseshoes()+" "+
+            info.getAccessory()+" "+info.getColour());
         }
 
         settingsFrame.dispose();

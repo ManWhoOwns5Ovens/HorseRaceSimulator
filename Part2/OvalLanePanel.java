@@ -24,12 +24,9 @@ public class OvalLanePanel extends LanePanel {
         g.drawLine(25*offset+width/2,25*offset+height,25*offset+width/2,25*offset+height+50);
         
         if(this.horse!= null){
-            g.setFont(new Font("SansSerif", Font.PLAIN, 15));
+            g.setFont(new Font("Sans Serif", Font.PLAIN, 15));
+            g.setColor(horse.getCoatColor());
             g.drawString(this.symbol+"",getHorseX()-10,getHorseY()+5);
-
-            g.drawString("X",25*offset+(raceLength*25 + laneNumber*50)/2,25*offset+(raceLength*25/2 + laneNumber*50)/2);
-    
-            g.setFont(new Font("SansSerif", Font.PLAIN, 10));
         }
     }
 
