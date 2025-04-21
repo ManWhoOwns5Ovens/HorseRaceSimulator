@@ -57,7 +57,7 @@ public class Horse
     {
         this.fallen = true;
     }
-    
+
     public double getConfidence()
     {
         return this.horseConfidence;
@@ -82,6 +82,18 @@ public class Horse
     }
     public Color getCoatColor(){
         return this.horseCoat;
+    }
+    public Breed getBreed(){
+        return this.horseBreed;
+    }
+    public Saddle getSaddle(){
+        return this.horseSaddle;
+    }
+    public Horseshoes getHorseshoes(){
+        return this.horseshoes;
+    }
+    public Accessory getAccessory(){
+        return this.horseAccessory;
     }
 
     //used by Race, returns movement interval after the user has input the weather

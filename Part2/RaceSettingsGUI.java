@@ -8,6 +8,8 @@ public class RaceSettingsGUI {
 
     private static ArrayList<HorseConfigPanel> horsePanels= new ArrayList<>();
 
+    private static ArrayList<Horse> horses = new ArrayList<>();
+
     public static void createFrame() {
         settingsFrame = new JFrame("Race Settings");
         settingsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,9 +45,11 @@ public class RaceSettingsGUI {
 
         for (int i=0; i<3; i++){
             HorseConfigPanel hcp=new HorseConfigPanel();
+            if(horses.size()>i && horses.get(i)!=null){hcp=new HorseConfigPanel(horses.get(i));}
+
             gbc.gridy=i;
             configPanel.add(hcp,gbc); // add to GUI
-            horsePanels.add(hcp); // keep track off
+            horsePanels.add(hcp); // keep track off object
         }
         JScrollPane horseConfigScroll= new JScrollPane(configPanel);
         return horseConfigScroll;
@@ -106,16 +110,33 @@ public class RaceSettingsGUI {
 
     private static void createRace(int raceLength, int laneCount, LaneType laneType, Weather weather) {
         Race race= new Race(raceLength,laneCount,laneType,weather);
-        
-        for(int i=0; i<horsePanels.size();i++){
-            HorseConfigPanel info=horsePanels.get(i);
-            race.addHorse(new Horse(info.getSymbol(),info.getName(),0.5,3.0,info.getBreed(),info.getSaddle(),info.getHorseshoes(),
-            info.getAccessory(),info.getColour()));
 
-            System.out.println(info.getSymbol()+" "+info.getName()+" "+0.5+" "+3.0+" "+info.getBreed()+" "+info.getSaddle()+" "+info.getHorseshoes()+" "+
-            info.getAccessory()+" "+info.getColour());
+        if(horses.isEmpty()){
+            for(int i=0; i<horsePanels.size();i++){
+                HorseConfigPanel info=horsePanels.get(i);
+                Horse newHorse=new Horse(info.getSymbol(),info.getName(),0.5,3.0,info.getBreed(),info.getSaddle(),info.getHorseshoes(),
+                info.getAccessory(),info.getColour());
+                race.addHorse(newHorse);
+                horses.add(newHorse);
+    
+                System.out.println(info.getSymbol()+" "+info.getName()+" "+0.5+" "+3.0+" "+info.getBreed()+" "+info.getSaddle()+" "+info.getHorseshoes()+" "+
+                info.getAccessory()+" "+info.getColour());
+            }
         }
+        else{
+            for(int i=0; i<horses.size();i++){
+                HorseConfigPanel info=horsePanels.get(i);
+                Horse newHorse=new Horse(info.getSymbol(),info.getName(),horses.get(i).getConfidence(),3.0,horses.get(i).getBreed(),info.getSaddle(),info.getHorseshoes(),
+                info.getAccessory(),info.getColour());
 
+                race.addHorse(newHorse);
+                horses.set(i,newHorse);//replace old version of horse
+    
+                System.out.println(info.getSymbol()+" "+info.getName()+" "+0.5+" "+3.0+" "+info.getBreed()+" "+info.getSaddle()+" "+info.getHorseshoes()+" "+
+                info.getAccessory()+" "+info.getColour());
+            }
+        }
+        
         settingsFrame.dispose();
 
         switch(race.getLaneType()){

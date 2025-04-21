@@ -10,7 +10,7 @@ import javax.swing.Timer;
  */
 public class Race
 {
-    private static Race instance;
+    //private static Race instance;
 
     private int raceLength;
     private int laneCount;
@@ -29,17 +29,21 @@ public class Race
      */
     public Race(int distance, int laneCount,LaneType laneType, Weather weather)
     {
-        if(instance==null){
+        /*if(instance==null){
             this.horses= new ArrayList<>();
         }
         else{
             this.horses= instance.getHorses();
-        }
+        }*/
+
+
+        this.horses= new ArrayList<>();
         // initialise instance variables
         setRaceLength(distance);
         setLaneCount(laneCount);
         this.laneType=laneType;
         this.weather=weather;
+
     }
 
     /**
@@ -98,9 +102,10 @@ public class Race
      */
     public void addHorse(Horse theHorse)
     {
-        if(instance==null){
+        /*if(instance==null){
             this.horses.add(theHorse);
-        }   
+        }  */ 
+        this.horses.add(theHorse);
     }
     
     /**
@@ -110,7 +115,6 @@ public class Race
      */
     public void startRace()
     {
-        instance=this;
         ArrayList<Horse> winners=new ArrayList<>();//number of horses in a tie can differ
 
         resetHorses();
