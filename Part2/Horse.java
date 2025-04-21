@@ -32,16 +32,16 @@ public class Horse
     /**
      * Constructor for objects of class Horse
      */
-    public Horse(char horseSymbol, String horseName, double horseConfidence, double horseSpeed, Breed horseBreed, Saddle horseSaddle, 
+    public Horse(char horseSymbol, String horseName, double horseConfidence, Breed horseBreed, Saddle horseSaddle, 
     Horseshoes horseshoes, Accessory horseAccessory, Color horseCoat)
     {
         this.horseName = horseName;
         this.horseSymbol = horseSymbol;
         this.distanceTravelled = 0;
         this.fallen = false;
-        setConfidence(horseConfidence);
 
-        setSpeed(horseSpeed);
+        setConfidence(horseConfidence);
+        this.horseSpeed=3.0;
         this.horseEndurance=1;
 
         this.horseBreed=horseBreed;
