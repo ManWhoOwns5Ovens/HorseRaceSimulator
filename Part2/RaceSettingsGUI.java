@@ -43,6 +43,7 @@ public class RaceSettingsGUI {
         settingsFrame.setVisible(true);
     }
 
+    //Horse Config
     private JScrollPane createHorseConfig(){
         horseConfigPanel= new JPanel();
         horseConfigPanel.setSize(800,400);
@@ -61,7 +62,9 @@ public class RaceSettingsGUI {
 
         for (int i=0; i<limit; i++){
             HorseConfigPanel hcp=new HorseConfigPanel();
-            if(horses.size()>i && horses.get(i)!=null){hcp=new HorseConfigPanel(horses.get(i));}//load values if respective horses exists
+            if(!horses.isEmpty()){
+                hcp=new HorseConfigPanel(horses.get(i));
+            }
 
             gbc.gridy=i;
             horseConfigPanel.add(hcp,gbc); // add to GUI
@@ -154,13 +157,14 @@ public class RaceSettingsGUI {
         return buttonPanel;
     }
     
+    //Race Settings
     private JPanel createRaceSettingsPanel() {
-        JSpinner raceLengthSpinner = createSpinner(10);
+        JSpinner raceLengthSpinner = createSpinner(10,50);
 
        // if(horses.isEmpty()){lanesCountSpinner = createSpinner(3);}
         //else{lanesCountSpinner = createSpinner(horses.size());}
 
-        lanesCountSpinner = createSpinner(horsePanels.size());//horse config created before track settings hence allowing for direct use of horse panels size
+        lanesCountSpinner = createSpinner(horsePanels.size(),12);//horse config created before track settings hence allowing for direct use of horse panels size
         
         JComboBox laneTypeList = createComboBox(LaneType.values());
 
@@ -189,8 +193,8 @@ public class RaceSettingsGUI {
         return trackSettingPanel;
     }
 
-    private JSpinner createSpinner(int defaultValue){
-        SpinnerNumberModel lanesCountModel = new SpinnerNumberModel(defaultValue, defaultValue, 12, 1);
+    private JSpinner createSpinner(int defaultValue, int maxValue){
+        SpinnerNumberModel lanesCountModel = new SpinnerNumberModel(defaultValue, defaultValue, maxValue, 1);
         return new JSpinner(lanesCountModel);
     }
 
@@ -203,26 +207,20 @@ public class RaceSettingsGUI {
     private void createRace(int raceLength, int laneCount, LaneType laneType, Weather weather) {
         Race race= new Race(raceLength,laneCount,laneType,weather);
 
-        if(horses.isEmpty()){
-            for(int i=0; i<horsePanels.size();i++){
-                HorseConfigPanel info=horsePanels.get(i);
-                Horse newHorse=new Horse(info.getSymbol(),info.getName(),0.5,info.getBreed(),info.getSaddle(),info.getHorseshoes(),
+        for(int i=1; i<=horsePanels.size();i++){
+            HorseConfigPanel info=horsePanels.get(i-1);
+            Horse newHorse = null;
+            if(i>horses.size()){
+                newHorse=new Horse(info.getSymbol(),info.getName(),0.5,info.getBreed(),info.getSaddle(),info.getHorseshoes(),
                 info.getAccessory(),info.getColour());
-
-                race.addHorse(newHorse);
                 horses.add(newHorse);
             }
-        }
-        else{
-            System.out.println("subsequent race");
-            for(int i=0; i<horses.size();i++){
-                HorseConfigPanel info=horsePanels.get(i);
-                Horse newHorse=new Horse(info.getSymbol(),info.getName(),horses.get(i).getConfidence(),info.getBreed(),info.getSaddle(),info.getHorseshoes(),
+            else{
+                newHorse=new Horse(info.getSymbol(),info.getName(),horses.get(i-1).getConfidence(),info.getBreed(),info.getSaddle(),info.getHorseshoes(),
                 info.getAccessory(),info.getColour());
-
-                race.addHorse(newHorse);
-                horses.set(i,newHorse);//replace old version of horse
+                horses.set(i-1,newHorse);//replace old version of horse
             }
+            race.addHorse(newHorse);
         }
         
         settingsFrame.dispose();

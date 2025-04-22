@@ -35,7 +35,7 @@ public class Race
         else{
             this.horses= instance.getHorses();
         }*/
-        
+
         this.horses= new ArrayList<>();
         // initialise instance variables
         setRaceLength(distance);
@@ -163,7 +163,6 @@ public class Race
             }
 
             theHorse.changeEndurance(-1);
-            System.out.println(theHorse.getEndurance());
             
             //the probability that the horse will fall is very small (max is 0.1)
             //but will also will depends exponentially on confidence 

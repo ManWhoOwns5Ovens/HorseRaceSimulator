@@ -39,6 +39,7 @@ public class HorseConfigPanel extends JPanel{
         gbc.gridy=0;
         gbc.gridwidth=2;
         nameInput= new JTextField(10);
+        nameInput.setText("Horse");
         if(this.theHorse!=null){nameInput.setText(theHorse.getName());}
 
         this.add(nameInput,gbc);
@@ -90,7 +91,7 @@ public class HorseConfigPanel extends JPanel{
         this.add(new JLabel("3.0 -> "),gbc);
 
         gbc.gridy=3;
-        this.add(new JLabel("20 -> "),gbc);
+        this.add(new JLabel("10 -> "),gbc);
 
         gbc.gridx=2;
         gbc.gridy=1;
@@ -216,9 +217,8 @@ public class HorseConfigPanel extends JPanel{
     }
 
     private int calculateEndurance(){
-        int endurance = 20 + this.getBreed().getEnduranceModifier() + this.getSaddle().getEnduranceModifier() + this.getHorseshoes().getEnduranceModifier() 
+        int endurance = 10 + this.getBreed().getEnduranceModifier() + this.getSaddle().getEnduranceModifier() + this.getHorseshoes().getEnduranceModifier() 
         + this.getAccessory().getEnduranceModifier();
-        System.out.println(endurance);
         if(endurance<=0){
             return 1;
         }
