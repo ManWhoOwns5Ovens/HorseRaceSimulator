@@ -117,7 +117,7 @@ public class Horse
         +this.horseAccessory.getSpeedModifier();
 
         if(finalSpeed<=0.0){
-            return 0.0;
+            return 0.1;
         }
         else{
             return finalSpeed;
@@ -134,14 +134,13 @@ public class Horse
         if(finalConfidence>1.0){
             return 1.0;
         }
-        else{
-            return finalConfidence;
+        else if (finalConfidence<=0.0){
+            return 0.1;
         }
-    }
+        return finalConfidence;
 
-    
-    public void goBackToStart(int raceLength)
-    {
+    }
+    public void goBackToStart(int raceLength){
         this.distanceTravelled = 0;
         this.fallen = false;
         setInitialEndurance(raceLength);
@@ -166,7 +165,7 @@ public class Horse
             this.horseConfidence = newConfidence;
         }
         else if(newConfidence <= 0.0){
-            this.horseConfidence = 0.01;
+            this.horseConfidence = 0.1;
         }
         else if(newConfidence > 1.0){
             this.horseConfidence = 1.0;
@@ -183,7 +182,7 @@ public class Horse
             this.horseSpeed=newSpeed;
         }
         else{
-            this.horseSpeed=0.0001;
+            this.horseSpeed=0.1;
         }
     }
 
@@ -210,5 +209,3 @@ public class Horse
     }
     
 }
-
-

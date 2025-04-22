@@ -35,8 +35,7 @@ public class Race
         else{
             this.horses= instance.getHorses();
         }*/
-
-
+        
         this.horses= new ArrayList<>();
         // initialise instance variables
         setRaceLength(distance);

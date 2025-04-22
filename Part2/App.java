@@ -1,6 +1,6 @@
 public class App {    
     public static void main(String[] a){
-        RaceSettingsGUI.createFrame();
+        RaceSettingsGUI settingsGUI=new RaceSettingsGUI();
     }
 
     /**

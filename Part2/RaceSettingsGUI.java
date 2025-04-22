@@ -3,23 +3,29 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class RaceSettingsGUI {
-    private static JFrame settingsFrame;
-    private static JPanel horseConfigPanel;
+    private JFrame settingsFrame;
+    private JPanel horseConfigPanel;
     private static RaceGUI gui;
 
-    private static ArrayList<HorseConfigPanel> horsePanels= new ArrayList<>();
+    private ArrayList<HorseConfigPanel> horsePanels;
 
-    private static ArrayList<Horse> horses = new ArrayList<>();
+    private static ArrayList<Horse> horses;
 
-    private static JSpinner lanesCountSpinner;//needs to be accessed and used when adding horses
+    private JSpinner lanesCountSpinner;//needs to be accessed and used when adding horses
 
-    public static void createFrame() {
+    public RaceSettingsGUI(){
+        if(horses==null){
+            horses= new ArrayList<>();
+        }
+        this.horsePanels= new ArrayList<>();
+        this.createFrame();
+    }
+
+    public void createFrame() {
         settingsFrame = new JFrame("Race Settings");
         settingsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         settingsFrame.setSize(1000, 400);
         settingsFrame.setLayout(new GridBagLayout());
-    
-        JPanel raceSettingsPanel = createRaceSettingsPanel();
     
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;    
@@ -28,7 +34,8 @@ public class RaceSettingsGUI {
         gbc.weighty=1.0;
         gbc.fill = GridBagConstraints.BOTH; 
         settingsFrame.add(createHorseConfig(), gbc); 
-    
+
+        JPanel raceSettingsPanel = createRaceSettingsPanel();
         gbc.gridx = 1;
         gbc.weightx = 0.2;
         settingsFrame.add(raceSettingsPanel, gbc);
@@ -36,7 +43,7 @@ public class RaceSettingsGUI {
         settingsFrame.setVisible(true);
     }
 
-    private static JScrollPane createHorseConfig(){
+    private JScrollPane createHorseConfig(){
         horseConfigPanel= new JPanel();
         horseConfigPanel.setSize(800,400);
         horseConfigPanel.setLayout(new GridBagLayout());
@@ -46,10 +53,11 @@ public class RaceSettingsGUI {
         gbc.gridx=0;
         gbc.weighty=1.0;
         gbc.ipady=10;
+        gbc.gridwidth=2;
 
         int limit = 3;
 
-        if(!horses.isEmpty()){limit=horsePanels.size();}
+        if(!horses.isEmpty()){limit=horses.size();}
 
         for (int i=0; i<limit; i++){
             HorseConfigPanel hcp=new HorseConfigPanel();
@@ -60,42 +68,56 @@ public class RaceSettingsGUI {
             horsePanels.add(hcp); // keep track off object
         }
         
-        if(horsePanels.size()<12){
-            gbc.gridy=horsePanels.size();
-            JButton addHorseButton=createAddHorseButton();
-            horseConfigPanel.add(addHorseButton,gbc);
-        }
-                
+        gbc.gridy=horsePanels.size();
+        horseConfigPanel.add(createBottomButtonPanel(), gbc);   
         JScrollPane horseConfigScroll= new JScrollPane(horseConfigPanel);
         return horseConfigScroll;
     }
 
-    private static void addHorseConfigPanel(){
+    private void addHorseConfigPanel(){
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill=GridBagConstraints.HORIZONTAL;
+        gbc.weighty=1.0;
+        gbc.ipady=10;
 
-        if (horseConfigPanel.getComponentCount() > 0) {
+        while(horseConfigPanel.getComponentCount()>horsePanels.size()){
             horseConfigPanel.remove(horseConfigPanel.getComponentCount() - 1);
-        }//remove latest element(always button)
-
+        }
+        
         HorseConfigPanel newHorsePanel=new HorseConfigPanel();
-        if(horses.size()>horsePanels.size()){newHorsePanel=new HorseConfigPanel(horses.get(horsePanels.size()));}//load data if horse existed already
 
         gbc.gridy=horsePanels.size();
         horseConfigPanel.add(newHorsePanel,gbc); // add to GUI
         horsePanels.add(newHorsePanel); // keep track off object
 
-        if(horsePanels.size()<12){
-            gbc.gridy++;
-            JButton addHorseButton=createAddHorseButton();
-            horseConfigPanel.add(addHorseButton,gbc);
-        }
-        
+        gbc.gridy++;
+        gbc.gridwidth=2;
+        horseConfigPanel.add(createBottomButtonPanel(), gbc);
+
         horseConfigPanel.revalidate();
         horseConfigPanel.repaint();
     }
 
-    private static JButton createAddHorseButton(){
+    private void removeHorseConfigPanel(){
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+
+        while(horseConfigPanel.getComponentCount()>horsePanels.size()){
+            horseConfigPanel.remove(horseConfigPanel.getComponentCount() - 1);
+        }
+        horseConfigPanel.remove(horseConfigPanel.getComponentCount() - 1);
+        horsePanels.removeLast();
+        if(!horses.isEmpty()){horses.removeLast();}
+
+        gbc.gridy = horsePanels.size();
+        gbc.gridwidth = 2;
+        horseConfigPanel.add(createBottomButtonPanel(), gbc);
+
+        horseConfigPanel.revalidate();
+        horseConfigPanel.repaint();
+    }
+
+    private JButton createAddHorseButton(){
         JButton addHorseButton=new JButton("+");
         addHorseButton.addActionListener(e -> {
             addHorseConfigPanel();
@@ -106,61 +128,79 @@ public class RaceSettingsGUI {
     });
         return addHorseButton;
     }
-    
-    private static JPanel createRaceSettingsPanel() {
-        JSpinner raceLengthSpinner = createRaceLengthSpinner();
-        lanesCountSpinner = createLaneCountSpinner();
-        JComboBox laneTypeList = createLaneTypeList();
 
-        JComboBox weatherList = createWeatherList(new Weather[] {Weather.SUNNY,Weather.RAINY,Weather.SNOWY});
+    private JButton createRemoveHorseButton(){
+        JButton removeHorseButton=new JButton("-");
+        removeHorseButton.addActionListener(e -> {
+            removeHorseConfigPanel();
 
-        JPanel panel = new JPanel(new GridLayout(5, 2));
-    
-        panel.add(new JLabel("Race Length:"));
-        panel.add(raceLengthSpinner);
-    
-        panel.add(new JLabel("Lanes:"));
-        panel.add(lanesCountSpinner);
+            lanesCountSpinner.setModel(new SpinnerNumberModel(horsePanels.size(),horsePanels.size(),12,1));
+            settingsFrame.revalidate();
+            settingsFrame.repaint();
+    });
+        return removeHorseButton;
+    }
 
-        panel.add(new JLabel("Lane Type:"));
-        panel.add(laneTypeList);
-
-        panel.add(new JLabel("Weather:"));
-        panel.add(weatherList);
+    private JPanel createBottomButtonPanel() {
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+        if (horsePanels.size() < 12) {
+            buttonPanel.add(createAddHorseButton());
+        }
     
-        panel.add(new JLabel("Start Race:"));
+        if (horsePanels.size() > 3) {
+            buttonPanel.add(createRemoveHorseButton());
+        }
+    
+        return buttonPanel;
+    }
+    
+    private JPanel createRaceSettingsPanel() {
+        JSpinner raceLengthSpinner = createSpinner(10);
+
+       // if(horses.isEmpty()){lanesCountSpinner = createSpinner(3);}
+        //else{lanesCountSpinner = createSpinner(horses.size());}
+
+        lanesCountSpinner = createSpinner(horsePanels.size());//horse config created before track settings hence allowing for direct use of horse panels size
+        
+        JComboBox laneTypeList = createComboBox(LaneType.values());
+
+        JComboBox weatherList = createComboBox(new Weather[] {Weather.SUNNY,Weather.RAINY,Weather.SNOWY});
+
+        JPanel trackSettingPanel = new JPanel(new GridLayout(5, 2));
+    
+        trackSettingPanel.add(new JLabel("Race Length:"));
+        trackSettingPanel.add(raceLengthSpinner);
+    
+        trackSettingPanel.add(new JLabel("Lanes:"));
+        trackSettingPanel.add(lanesCountSpinner);
+
+        trackSettingPanel.add(new JLabel("Lane Type:"));
+        trackSettingPanel.add(laneTypeList);
+
+        trackSettingPanel.add(new JLabel("Weather:"));
+        trackSettingPanel.add(weatherList);
+    
+        trackSettingPanel.add(new JLabel("Start Race:"));
 
         JButton startButton = new JButton("Confirm");
         startButton.addActionListener(e -> createRace((int) raceLengthSpinner.getValue(),(int) lanesCountSpinner.getValue(), (LaneType)laneTypeList.getSelectedItem(),(Weather)weatherList.getSelectedItem()));
-        panel.add(startButton);
+        trackSettingPanel.add(startButton);
     
-        return panel;
+        return trackSettingPanel;
     }
 
-    private static JSpinner createRaceLengthSpinner(){
-        SpinnerNumberModel raceLengthModel = new SpinnerNumberModel(10, 10, 50, 1);
-        return new JSpinner(raceLengthModel);
-    }
-
-    private static JSpinner createLaneCountSpinner(){
-        SpinnerNumberModel lanesCountModel = new SpinnerNumberModel(3, 3, 12, 1);
+    private JSpinner createSpinner(int defaultValue){
+        SpinnerNumberModel lanesCountModel = new SpinnerNumberModel(defaultValue, defaultValue, 12, 1);
         return new JSpinner(lanesCountModel);
     }
 
-    private static JComboBox createLaneTypeList(){
-        JComboBox laneTypeList = new JComboBox(LaneType.values());
-        laneTypeList.setSelectedIndex(0);
-        return laneTypeList;
-    }
-
-    private static JComboBox createWeatherList(Object[] weatherValues){
-        JComboBox weatherList = new JComboBox(weatherValues);
-        weatherList.setSelectedIndex(0);
-        return weatherList;
+    private JComboBox createComboBox(Object[] choices){
+        JComboBox cb = new JComboBox(choices);
+        cb.setSelectedIndex(0);
+        return cb;
     }
     
-
-    private static void createRace(int raceLength, int laneCount, LaneType laneType, Weather weather) {
+    private void createRace(int raceLength, int laneCount, LaneType laneType, Weather weather) {
         Race race= new Race(raceLength,laneCount,laneType,weather);
 
         if(horses.isEmpty()){
@@ -174,6 +214,7 @@ public class RaceSettingsGUI {
             }
         }
         else{
+            System.out.println("subsequent race");
             for(int i=0; i<horses.size();i++){
                 HorseConfigPanel info=horsePanels.get(i);
                 Horse newHorse=new Horse(info.getSymbol(),info.getName(),horses.get(i).getConfidence(),info.getBreed(),info.getSaddle(),info.getHorseshoes(),

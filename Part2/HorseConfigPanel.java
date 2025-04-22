@@ -197,12 +197,11 @@ public class HorseConfigPanel extends JPanel{
         if(this.theHorse!=null){confidence=theHorse.getConfidence();}
         confidence *= this.getBreed().getConfidenceModifier() * this.getSaddle().getConfidenceModifier() * this.getHorseshoes().getConfidenceModifier() 
         * this.getAccessory().getConfidenceModifier();
-
         if (confidence>1.0){
             return 1.0;
         }
         else if (confidence<=0.0){
-            return 0.01;
+            return 0.1;
         }
         return confidence;
     }
@@ -211,7 +210,7 @@ public class HorseConfigPanel extends JPanel{
         double speed = 3.0 + this.getBreed().getSpeedModifier() + this.getSaddle().getSpeedModifier() + this.getHorseshoes().getSpeedModifier() 
         + this.getAccessory().getSpeedModifier();
         if(speed<=0.0){
-            return 0.0001;
+            return 0.1;
         }
         return speed;
     }
