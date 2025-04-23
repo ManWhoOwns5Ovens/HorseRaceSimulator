@@ -79,7 +79,7 @@ abstract class RaceGUI {
         resultsPanel.setLayout(new GridBagLayout());
         resultsPanel.setSize(raceWidth+200, 100);
 
-        if(this instanceof OvalRaceGUI){
+        if(this instanceof OvalRaceGUI || this instanceof EightRaceGUI){
             resultsPanel.setLocation(0, raceHeight+150);
         }
         else{

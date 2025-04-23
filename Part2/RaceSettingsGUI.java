@@ -161,9 +161,6 @@ public class RaceSettingsGUI {
     private JPanel createRaceSettingsPanel() {
         JSpinner raceLengthSpinner = createSpinner(10,50);
 
-       // if(horses.isEmpty()){lanesCountSpinner = createSpinner(3);}
-        //else{lanesCountSpinner = createSpinner(horses.size());}
-
         lanesCountSpinner = createSpinner(horsePanels.size(),12);//horse config created before track settings hence allowing for direct use of horse panels size
         
         JComboBox laneTypeList = createComboBox(LaneType.values());
@@ -231,6 +228,9 @@ public class RaceSettingsGUI {
                 break;
             case LaneType.OVAL:
                 gui=new OvalRaceGUI(race);
+                break;
+            case LaneType.EIGHT:
+                gui=new EightRaceGUI(race);
                 break;
         }
 
