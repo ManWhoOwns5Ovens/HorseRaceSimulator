@@ -7,9 +7,9 @@ public class Breed extends HorseCondition{
     public static final Breed QUARTER_HORSE = new Breed("Quarter Horse",1.0, 0.67, -5); 
 
     public static final Breed[] ALL_BREEDS=new Breed[]{
-        Breed.THOROUGHBRED,
-        Breed.ARABIAN,
         Breed.CLYDESDALE,
+        Breed.THOROUGHBRED,
+        Breed.ARABIAN, 
         Breed.MUSTANG,
         Breed.QUARTER_HORSE
     };

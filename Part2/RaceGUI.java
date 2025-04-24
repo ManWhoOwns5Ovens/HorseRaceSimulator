@@ -18,6 +18,8 @@ abstract class RaceGUI {
 
     protected ArrayList<LanePanel> lanes;
 
+    //protected HashMap<LanePanel, Timer> lanes;
+
     public RaceGUI(Race race){
         this.race=race;
         this.raceLength=race.getRaceLength();
@@ -25,6 +27,7 @@ abstract class RaceGUI {
         this.raceFrame=new JFrame("Race");
         this.raceWidth=0;
         this.raceHeight=0;
+        //this.lanes= new HashMap<>();
         this.lanes=new ArrayList();
         this.horseGUITimers= new Timer[0];
     }
@@ -38,11 +41,12 @@ abstract class RaceGUI {
 
     protected void createRacePanel(){} //to be overriden
 
-    protected void startTimer(){
+    protected void startAllTimers(){
         horseGUITimers=new Timer[lanes.size()];
         for(int i=0;i<lanes.size();i++){
             LanePanel currentLane=lanes.get(i);
-            horseGUITimers[i]=new Timer(lanes.get(i).getHorse().getMovementInterval(race.getWeather()), e->{
+            int interval= currentLane.getHorse().getMovementInterval(race.getWeather());
+            horseGUITimers[i]=new Timer( interval, e->{
                 currentLane.updateLane();
             });
             horseGUITimers[i].start();
@@ -52,6 +56,36 @@ abstract class RaceGUI {
     protected void stopAllTimers(){
         for(Timer timer: horseGUITimers){
             timer.stop();
+        }
+    }
+
+    protected void slowDownTimer(LanePanel slowedDownPanel){
+        for (int i=0; i<lanes.size(); i++){
+            if(lanes.get(i).equals(slowedDownPanel)){
+                horseGUITimers[i].stop();
+                LanePanel currentLane=lanes.get(i);
+                int interval= currentLane.getHorse().getMovementInterval(race.getWeather()) * 2;
+                race.slowDownTimer(i);
+                horseGUITimers[i]=new Timer(interval, e->{
+                    currentLane.updateLane();
+                });
+                horseGUITimers[i].start();
+            }
+        }
+    }
+
+    protected void resetTimer(LanePanel resetLane){
+        for (int i=0; i<lanes.size(); i++){
+            if(lanes.get(i).equals(resetLane)){
+                horseGUITimers[i].stop();
+                LanePanel currentLane=lanes.get(i);
+                int interval= currentLane.getHorse().getMovementInterval(race.getWeather());
+                race.resetTimer(i);
+                horseGUITimers[i]=new Timer(interval, e->{
+                    currentLane.updateLane();
+                });
+                horseGUITimers[i].start();
+            }
         }
     }
 

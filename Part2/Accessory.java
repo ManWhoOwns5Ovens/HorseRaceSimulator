@@ -7,10 +7,10 @@ public class Accessory extends HorseCondition{
     public static final Accessory TOP_HAT = new Accessory("Top Hat",0.0, 2.0, 0); 
 
     public static final Accessory[] ALL_ACCESSORIES=new Accessory[]{
+        Accessory.LEG_WRAPS,
         Accessory.BLINDERS,
         Accessory.NOSEBAND,
         Accessory.EARPLUGS,
-        Accessory.LEG_WRAPS,
         Accessory.TOP_HAT
     };
 

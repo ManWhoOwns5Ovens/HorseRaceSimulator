@@ -44,6 +44,6 @@ public class OvalRaceGUI extends RaceGUI{
         racePanel.add(weatherLabel);
         raceFrame.add(racePanel);
         raceFrame.setVisible(true);
-        startTimer();
+        startAllTimers();
     }
 }

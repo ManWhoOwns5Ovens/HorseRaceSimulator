@@ -58,7 +58,7 @@ public class StraightRaceGUI extends RaceGUI{
 
         raceFrame.add(racePanel);
         raceFrame.setVisible(true);
-        startTimer();
+        startAllTimers();
     }
 
 }

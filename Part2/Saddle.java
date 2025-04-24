@@ -7,8 +7,8 @@ public class Saddle extends HorseCondition{
     public static final Saddle NO_SADDLE = new Saddle("No Saddle",1.0, 0.67, -5);  
 
     public static final Saddle[] ALL_SADDLES=new Saddle[]{
-        Saddle.RACING,
         Saddle.ENDURANCE,
+        Saddle.RACING,
         Saddle.WESTERN,
         Saddle.JUMPING,
         Saddle.NO_SADDLE

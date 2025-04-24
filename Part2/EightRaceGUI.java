@@ -21,7 +21,7 @@ public class EightRaceGUI extends RaceGUI{
 
         ArrayList<Horse> horses=race.getHorses();
         for(int i=0; i<horses.size();i++){
-            EightLanePanel newHorseLane= new EightLanePanel(horses.get(i), raceLength,(laneCount-i),i);
+            EightLanePanel newHorseLane= new EightLanePanel(horses.get(i), raceLength,(laneCount-i),i,this);
             newHorseLane.setSize(raceWidth,raceHeight);
             newHorseLane.setLocation(25,50);
             racePanel.add(newHorseLane);
@@ -43,6 +43,6 @@ public class EightRaceGUI extends RaceGUI{
         racePanel.add(weatherLabel);
         raceFrame.add(racePanel);
         raceFrame.setVisible(true);
-        startTimer();
+        startAllTimers();
     }
 }

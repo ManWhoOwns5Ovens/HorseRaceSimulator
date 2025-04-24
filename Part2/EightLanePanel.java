@@ -5,11 +5,30 @@ import java.awt.*;
     private int diameter, radius, circleDistance;
 
     private boolean isFirst,isLast;
+    private boolean isSlowed;
+
+    private RaceGUI gui;
+
+    public EightLanePanel(Horse horse, int raceLength,int offset,int laneNumber, RaceGUI gui) {
+        super(horse, raceLength);
+        this.offset=offset;
+        this.diameter=(raceLength*25 + laneNumber*50)/2;
+        this.radius=this.diameter/2;
+        this.circleDistance=(int)(this.diameter);
+
+        this.isFirst=(laneNumber==0);
+        this.isLast=(offset==1);
+
+        this.gui=gui;
+
+        this.isSlowed=false;
+
+        setOpaque(false);
+    }
 
     public EightLanePanel(Horse horse, int raceLength,int offset,int laneNumber) {
         super(horse, raceLength);
         this.offset=offset;
-
         this.diameter=(raceLength*25 + laneNumber*50)/2;
         this.radius=this.diameter/2;
         this.circleDistance=(int)(this.diameter);
@@ -45,6 +64,18 @@ import java.awt.*;
 
     private int getHorseX(){
         double progress=(double)this.horse.getDistanceTravelled() / (double)this.raceLength;
+
+        //in the middle of the track/ at the intersection
+        //only change timers when not already slowed
+        if(((progress>=0.125 && progress<0.375) || (progress>=0.625 && progress<0.875)) && !isSlowed){ 
+            this.isSlowed=true;
+            this.gui.slowDownTimer(this);
+        }
+        else{
+            this.isSlowed=false;
+            this.gui.resetTimer(this);
+        }
+
         double angle = 2 * Math.PI *progress;
 
         double xPos= (2 / (3 - Math.cos(2 * angle))) * //scale
@@ -92,4 +123,6 @@ import java.awt.*;
         return (int)(25*offset+radius
              + radius*Math.sin(angle));*/
     }
+
+
 }

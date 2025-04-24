@@ -137,11 +137,6 @@ public class Race
         }
     }
 
-    private void stopAllTimers(){
-        for(Timer timer: horseTimers){
-            timer.stop();
-        }
-    }
     
     /**
      * Randomly make a horse move forward or fall depending
@@ -241,5 +236,48 @@ public class Race
     }
 
     
+    private void stopAllTimers(){
+        for(Timer timer: horseTimers){
+            timer.stop();
+        }
+    }
+
+    public void slowDownTimer(int timerIndex){
+        ArrayList<Horse> winners=new ArrayList<>();
+        horseTimers[timerIndex].stop();
+        Horse theHorse=horses.get(timerIndex);
+        horseTimers[timerIndex]=new Timer(theHorse.getMovementInterval(this.weather) * 2, e->{
+            moveHorse(theHorse);
+            if(raceWonBy(theHorse)){ //check every land at the end of a state
+                winners.add(theHorse);
+                updateHorseConfidence(theHorse, true);//increase confidence of winner
+            }
+            //if race has ended (there are winners, or all horses have fallen)
+            if(!winners.isEmpty() || !canRaceContinue()){
+                stopAllTimers(); //stop the timer
+                RaceSettingsGUI.raceEnd(winners);
+            }
+        });
+        horseTimers[timerIndex].start(); //start the timer to move the horses
+    }
+    
+    public void resetTimer(int timerIndex){
+        ArrayList<Horse> winners=new ArrayList<>();
+        horseTimers[timerIndex].stop();
+        Horse theHorse=horses.get(timerIndex);
+        horseTimers[timerIndex]=new Timer(theHorse.getMovementInterval(this.weather), e->{
+            moveHorse(theHorse);
+            if(raceWonBy(theHorse)){ //check every land at the end of a state
+                winners.add(theHorse);
+                updateHorseConfidence(theHorse, true);//increase confidence of winner
+            }
+            //if race has ended (there are winners, or all horses have fallen)
+            if(!winners.isEmpty() || !canRaceContinue()){
+                stopAllTimers(); //stop the timer
+                RaceSettingsGUI.raceEnd(winners);
+            }
+        });
+        horseTimers[timerIndex].start(); //start the timer to move the horses
+    }
 }
 
