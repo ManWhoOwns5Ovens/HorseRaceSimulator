@@ -9,15 +9,16 @@ public class EightRaceGUI extends RaceGUI{
 
     @Override
     public void createRacePanel(){
-        raceWidth=(raceLength*25 + laneCount*50)*2;
-        raceHeight=raceLength*25 + laneCount*50;
-        raceFrame.setSize(raceWidth+150, raceHeight+400);
+        raceWidth=(raceLength*25 + laneCount*50) +50;
+        raceHeight=raceLength*25 /2 + laneCount*50 ;
+        raceFrame.setSize(raceWidth +150, raceHeight+250);
 
         JPanel racePanel= new JPanel();
 
         racePanel.setLayout(null);
         racePanel.setLocation(25,50);
         racePanel.setSize(raceWidth+100,raceHeight+100);
+        racePanel.setOpaque(false);
 
         ArrayList<Horse> horses=race.getHorses();
         for(int i=0; i<horses.size();i++){
@@ -44,5 +45,11 @@ public class EightRaceGUI extends RaceGUI{
         raceFrame.add(racePanel);
         raceFrame.setVisible(true);
         startAllTimers();
+    }
+
+    @Override
+    protected JPanel setResultsPanelLocation(JPanel rp){
+        rp.setLocation(0, raceHeight+75);
+        return rp;
     }
 }

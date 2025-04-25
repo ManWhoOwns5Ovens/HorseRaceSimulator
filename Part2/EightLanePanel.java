@@ -1,7 +1,7 @@
 import java.awt.*;
  class EightLanePanel extends LanePanel{
 
-    private int offset;
+    private int offset,laneNumber;
     private int diameter, radius, circleDistance;
 
     private boolean isFirst,isLast;
@@ -12,15 +12,16 @@ import java.awt.*;
     public EightLanePanel(Horse horse, int raceLength,int offset,int laneNumber, RaceGUI gui) {
         super(horse, raceLength);
         this.offset=offset;
+        this.laneNumber=laneNumber;
+
         this.diameter=(raceLength*25 + laneNumber*50)/2;
         this.radius=this.diameter/2;
-        this.circleDistance=(int)(this.diameter);
+        this.circleDistance=(raceLength*25)/2 + (25-raceLength)*3;
 
         this.isFirst=(laneNumber==0);
         this.isLast=(offset==1);
 
         this.gui=gui;
-
         this.isSlowed=false;
 
         setOpaque(false);
@@ -29,9 +30,11 @@ import java.awt.*;
     public EightLanePanel(Horse horse, int raceLength,int offset,int laneNumber) {
         super(horse, raceLength);
         this.offset=offset;
+        this.laneNumber=laneNumber;
+
         this.diameter=(raceLength*25 + laneNumber*50)/2;
         this.radius=this.diameter/2;
-        this.circleDistance=(int)(this.diameter);
+        this.circleDistance=(raceLength*25)/2 + (25-raceLength)*3;//prevent right arc from being silly
 
         this.isFirst=(laneNumber==0);
         this.isLast=(offset==1);
@@ -44,21 +47,22 @@ import java.awt.*;
         super.paintComponent(g);
         
         if(this.isFirst){
-            g.drawOval(25*offset,25*offset,diameter-1,diameter-1);
-            g.drawOval(25*offset+(offset*50)+25,25*offset,diameter-1,diameter-1);
-            g.drawString("X", 25*offset, 25*offset);
+            int lengthModifier=offset*13 + radius+((10-raceLength)*3);//scaling with race length
+            int laneModifier=((offset-2)*15);//scaling with lane number
+            g.drawOval(lengthModifier,lengthModifier,radius-1,radius-1);
+            g.drawOval(lengthModifier+circleDistance+laneModifier,lengthModifier,radius-1,radius-1);
         }
 
         if (this.isLast) {
-            g.drawOval(25*offset,25*offset,diameter+50-1,diameter+50-1);
-            g.drawOval(25*offset+circleDistance,25*offset,diameter+50-1,diameter+50-1);
-            g.drawString("J", 25*offset-25,25*offset-25);
+            int laneModifier=((laneNumber-1)*15);//scaling with lane number
+            g.drawArc(25*offset,25*offset,diameter+50-1,diameter+50-1, 40, 280);
+            g.drawArc(25*offset+circleDistance+laneModifier,25*offset,diameter+50-1,diameter+50-1, -140, 280);
         }   
 
         if(this.horse!= null){
             g.setFont(new Font("Sans Serif", Font.PLAIN, 15));
             g.setColor(horse.getCoatColor());
-            g.drawString(this.symbol+"",getHorseX(),getHorseY());
+            g.drawString(this.symbol+"",getHorseX()+10,getHorseY()-10);
         }
     }
 
@@ -67,11 +71,12 @@ import java.awt.*;
 
         //in the middle of the track/ at the intersection
         //only change timers when not already slowed
-        if(((progress>=0.125 && progress<0.375) || (progress>=0.625 && progress<0.875)) && !isSlowed){ 
+        boolean isAtIntersection=(progress>=0.125 && progress<0.375) || (progress>=0.625 && progress<0.875);
+        if(isAtIntersection && !isSlowed){ //intersection AND not slowed yet
             this.isSlowed=true;
             this.gui.slowDownTimer(this);
         }
-        else{
+        else if(!isAtIntersection && isSlowed){ //no longer at intersection but have been slowed
             this.isSlowed=false;
             this.gui.resetTimer(this);
         }
@@ -81,7 +86,7 @@ import java.awt.*;
         double xPos= (2 / (3 - Math.cos(2 * angle))) * //scale
         Math.cos(angle);
 
-        return (int)(25*offset+diameter + (diameter+10)*xPos);
+        return (int)(25*offset+diameter+ (diameter -10) *xPos);
 
         /*if(progress<0.25){
             double angle=(progress/0.25)*Math.PI;
@@ -104,10 +109,10 @@ import java.awt.*;
         double progress=(double)this.horse.getDistanceTravelled() / (double)this.raceLength;
         double angle = 2 * Math.PI *progress;
 
-        double yPos = (2 / (3 - Math.cos(2 * angle))) * //scale
+        double yPos =(2 / (3 - Math.cos(2 * angle))) * //scale
         Math.sin(2 * angle) / 2;
 
-        return (int)(25* offset+ radius + (diameter+10)* yPos);
+        return (int)(25* offset+ radius+ (diameter+20)* yPos);
 
 
         /*if(progress<0.25){

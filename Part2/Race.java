@@ -114,13 +114,13 @@ public class Race
      */
     public void startRace()
     {
-        ArrayList<Horse> winners=new ArrayList<>();//number of horses in a tie can differ
+        //ArrayList<Horse> winners=new ArrayList<>();//number of horses in a tie can differ
 
         resetHorses();
         horseTimers=new Timer[horses.size()];
 
         for(int i=0; i<horses.size();i++){
-            Horse currentHorse=horses.get(i);
+            /*Horse currentHorse=horses.get(i);
             horseTimers[i]=new Timer(currentHorse.getMovementInterval(this.weather), e->{
                 moveHorse(currentHorse);
                 if(raceWonBy(currentHorse)){ //check every land at the end of a state
@@ -133,7 +133,8 @@ public class Race
                     RaceSettingsGUI.raceEnd(winners);
                 }
             });
-            horseTimers[i].start(); //start the timer to move the horses
+            horseTimers[i].start(); //start the timer to move the horses*/
+            setupTimer(i, false);
         }
     }
 
@@ -235,6 +236,25 @@ public class Race
         }
     }
 
+    private void setupTimer(int index, boolean isSlowDown){
+        ArrayList<Horse> winners=new ArrayList<>();
+        Horse currentHorse=horses.get(index);
+        int interval=currentHorse.getMovementInterval(this.weather);
+        if(isSlowDown){interval*=2;}
+        horseTimers[index]=new Timer(interval, e->{
+            moveHorse(currentHorse);
+            if(raceWonBy(currentHorse)){ //check every land at the end of a state
+                winners.add(currentHorse);
+                updateHorseConfidence(currentHorse, true);//increase confidence of winner
+            }
+            //if race has ended (there are winners, or all horses have fallen)
+            if(!winners.isEmpty() || !canRaceContinue()){
+                stopAllTimers(); //stop the timer
+                RaceSettingsGUI.raceEnd(winners);
+            }
+        });
+        horseTimers[index].start(); //start the timer to move the horses
+    }
     
     private void stopAllTimers(){
         for(Timer timer: horseTimers){
@@ -243,41 +263,13 @@ public class Race
     }
 
     public void slowDownTimer(int timerIndex){
-        ArrayList<Horse> winners=new ArrayList<>();
         horseTimers[timerIndex].stop();
-        Horse theHorse=horses.get(timerIndex);
-        horseTimers[timerIndex]=new Timer(theHorse.getMovementInterval(this.weather) * 2, e->{
-            moveHorse(theHorse);
-            if(raceWonBy(theHorse)){ //check every land at the end of a state
-                winners.add(theHorse);
-                updateHorseConfidence(theHorse, true);//increase confidence of winner
-            }
-            //if race has ended (there are winners, or all horses have fallen)
-            if(!winners.isEmpty() || !canRaceContinue()){
-                stopAllTimers(); //stop the timer
-                RaceSettingsGUI.raceEnd(winners);
-            }
-        });
-        horseTimers[timerIndex].start(); //start the timer to move the horses
+        setupTimer(timerIndex, true);
     }
     
     public void resetTimer(int timerIndex){
-        ArrayList<Horse> winners=new ArrayList<>();
         horseTimers[timerIndex].stop();
-        Horse theHorse=horses.get(timerIndex);
-        horseTimers[timerIndex]=new Timer(theHorse.getMovementInterval(this.weather), e->{
-            moveHorse(theHorse);
-            if(raceWonBy(theHorse)){ //check every land at the end of a state
-                winners.add(theHorse);
-                updateHorseConfidence(theHorse, true);//increase confidence of winner
-            }
-            //if race has ended (there are winners, or all horses have fallen)
-            if(!winners.isEmpty() || !canRaceContinue()){
-                stopAllTimers(); //stop the timer
-                RaceSettingsGUI.raceEnd(winners);
-            }
-        });
-        horseTimers[timerIndex].start(); //start the timer to move the horses
+        setupTimer(timerIndex, false);
     }
 }
 

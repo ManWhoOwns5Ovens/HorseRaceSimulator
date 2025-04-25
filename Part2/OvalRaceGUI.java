@@ -46,4 +46,10 @@ public class OvalRaceGUI extends RaceGUI{
         raceFrame.setVisible(true);
         startAllTimers();
     }
+
+    @Override
+    protected JPanel setResultsPanelLocation(JPanel rp){
+        rp.setLocation(0, raceHeight+150);
+        return rp;
+    }
 }

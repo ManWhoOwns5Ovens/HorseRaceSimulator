@@ -41,15 +41,20 @@ abstract class RaceGUI {
 
     protected void createRacePanel(){} //to be overriden
 
+    protected void setupTimer(int index,boolean isSlowDown){
+        LanePanel currentLane=lanes.get(index);
+        int interval= currentLane.getHorse().getMovementInterval(race.getWeather());
+        if(isSlowDown){interval*=2;}
+        horseGUITimers[index]=new Timer( interval, e->{
+            currentLane.updateLane();
+        });
+        horseGUITimers[index].start();
+    }
+
     protected void startAllTimers(){
         horseGUITimers=new Timer[lanes.size()];
         for(int i=0;i<lanes.size();i++){
-            LanePanel currentLane=lanes.get(i);
-            int interval= currentLane.getHorse().getMovementInterval(race.getWeather());
-            horseGUITimers[i]=new Timer( interval, e->{
-                currentLane.updateLane();
-            });
-            horseGUITimers[i].start();
+            setupTimer(i,false);
         }
     }
 
@@ -63,13 +68,9 @@ abstract class RaceGUI {
         for (int i=0; i<lanes.size(); i++){
             if(lanes.get(i).equals(slowedDownPanel)){
                 horseGUITimers[i].stop();
-                LanePanel currentLane=lanes.get(i);
-                int interval= currentLane.getHorse().getMovementInterval(race.getWeather()) * 2;
+                setupTimer(i, true);
                 race.slowDownTimer(i);
-                horseGUITimers[i]=new Timer(interval, e->{
-                    currentLane.updateLane();
-                });
-                horseGUITimers[i].start();
+                return;
             }
         }
     }
@@ -78,13 +79,9 @@ abstract class RaceGUI {
         for (int i=0; i<lanes.size(); i++){
             if(lanes.get(i).equals(resetLane)){
                 horseGUITimers[i].stop();
-                LanePanel currentLane=lanes.get(i);
-                int interval= currentLane.getHorse().getMovementInterval(race.getWeather());
+                setupTimer(i, false);
                 race.resetTimer(i);
-                horseGUITimers[i]=new Timer(interval, e->{
-                    currentLane.updateLane();
-                });
-                horseGUITimers[i].start();
+                return;
             }
         }
     }
@@ -113,12 +110,7 @@ abstract class RaceGUI {
         resultsPanel.setLayout(new GridBagLayout());
         resultsPanel.setSize(raceWidth+200, 100);
 
-        if(this instanceof OvalRaceGUI || this instanceof EightRaceGUI){
-            resultsPanel.setLocation(0, raceHeight+150);
-        }
-        else{
-            resultsPanel.setLocation(25, raceHeight+50);
-        }
+        resultsPanel=setResultsPanelLocation(resultsPanel);
         
         GridBagConstraints gbc= new GridBagConstraints();
 
@@ -145,6 +137,8 @@ abstract class RaceGUI {
 
         return resultsPanel;
     }
+
+    abstract JPanel setResultsPanelLocation(JPanel rp);
 
     protected JLabel createResultsFinalMessage(String displayMessage){
         JLabel messageLabel=new JLabel(displayMessage);

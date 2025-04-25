@@ -61,4 +61,10 @@ public class StraightRaceGUI extends RaceGUI{
         startAllTimers();
     }
 
+    @Override
+    protected JPanel setResultsPanelLocation(JPanel rp){
+        rp.setLocation(25, raceHeight+50);
+        return rp;
+    }
+
 }
