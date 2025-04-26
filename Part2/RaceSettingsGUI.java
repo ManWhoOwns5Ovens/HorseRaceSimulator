@@ -125,7 +125,7 @@ public class RaceSettingsGUI {
         addHorseButton.addActionListener(e -> {
             addHorseConfigPanel();
 
-            lanesCountSpinner.setModel(new SpinnerNumberModel(horsePanels.size(),horsePanels.size(),12,1));
+            lanesCountSpinner.setModel(new SpinnerNumberModel(horsePanels.size(),horsePanels.size(),8,1));
             settingsFrame.revalidate();
             settingsFrame.repaint();
     });
@@ -137,7 +137,7 @@ public class RaceSettingsGUI {
         removeHorseButton.addActionListener(e -> {
             removeHorseConfigPanel();
 
-            lanesCountSpinner.setModel(new SpinnerNumberModel(horsePanels.size(),horsePanels.size(),12,1));
+            lanesCountSpinner.setModel(new SpinnerNumberModel(horsePanels.size(),horsePanels.size(),8,1));
             settingsFrame.revalidate();
             settingsFrame.repaint();
     });
@@ -146,7 +146,7 @@ public class RaceSettingsGUI {
 
     private JPanel createBottomButtonPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
-        if (horsePanels.size() < 12) {
+        if (horsePanels.size() < 8) {
             buttonPanel.add(createAddHorseButton());
         }
     
@@ -161,7 +161,7 @@ public class RaceSettingsGUI {
     private JPanel createRaceSettingsPanel() {
         JSpinner raceLengthSpinner = createSpinner(10,30);
 
-        lanesCountSpinner = createSpinner(horsePanels.size(),12);//horse config created before track settings hence allowing for direct use of horse panels size
+        lanesCountSpinner = createSpinner(horsePanels.size(),8);//horse config created before track settings hence allowing for direct use of horse panels size
         
         JComboBox laneTypeList = createComboBox(LaneType.values());
 

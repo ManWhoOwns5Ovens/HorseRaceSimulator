@@ -16,9 +16,11 @@ public class ZigzagRaceGUI extends RaceGUI{
         JPanel racePanel= new JPanel();
         racePanel.setLayout(null);
         racePanel.setLocation(25,50);
-        racePanel.setSize(raceWidth + 350, raceHeight);
+        racePanel.setSize(raceWidth, raceHeight);
 
         ArrayList<Horse> horses=race.getHorses();
+
+        JPanel horseLabelPanel= createHorseLabelPanel(horses);
 
         for(int i = 0; i < horses.size(); i++){
             Horse theHorse= horses.get(i);
@@ -28,7 +30,7 @@ public class ZigzagRaceGUI extends RaceGUI{
             newHorseLane.setLocation(i*25,0);
             racePanel.add(newHorseLane);
 
-            racePanel.add(new JLabel(theHorse.getName()+" (Current confidence "+theHorse.getConfidence()+")"));
+            horseLabelPanel.add(createHorseLabel(theHorse));
             lanes.add(newHorseLane);
         }
 
@@ -47,6 +49,7 @@ public class ZigzagRaceGUI extends RaceGUI{
         racePanel.add(weatherLabel);
 
         raceFrame.add(racePanel);
+        raceFrame.add(horseLabelPanel);
         raceFrame.setVisible(true);
         startAllTimers();
     }

@@ -12,19 +12,27 @@ public class OvalRaceGUI extends RaceGUI{
     public void createRacePanel(){
         raceWidth=raceLength*25 + laneCount*50;
         raceHeight=raceLength*25/2 + laneCount*50;
-        raceFrame.setSize(raceWidth+150, raceHeight+400);
+        //raceFrame.setSize(raceWidth+150, raceHeight+400);
+        raceFrame.setSize(raceWidth+500, raceHeight+300);
 
         JPanel racePanel= new JPanel();
-
         racePanel.setLayout(null);
         racePanel.setLocation(25,50);
         racePanel.setSize(raceWidth+100,raceHeight+100);
+        racePanel.setOpaque(false);
 
         ArrayList<Horse> horses=race.getHorses();
+
+        JPanel horseLabelPanel= createHorseLabelPanel(horses);
+
         for(int i=0; i<horses.size();i++){
-            OvalLanePanel newHorseLane= new OvalLanePanel(horses.get(i), raceLength,(laneCount-i),i);
+            Horse theHorse=horses.get(i);
+            OvalLanePanel newHorseLane= new OvalLanePanel(theHorse, raceLength,(laneCount-i),i);
             newHorseLane.setSize(raceWidth,raceHeight);
             newHorseLane.setLocation(25,50);
+
+            horseLabelPanel.add(createHorseLabel(theHorse));
+
             racePanel.add(newHorseLane);
             lanes.add(newHorseLane);
         }
@@ -43,13 +51,14 @@ public class OvalRaceGUI extends RaceGUI{
         
         racePanel.add(weatherLabel);
         raceFrame.add(racePanel);
+        raceFrame.add(horseLabelPanel);
         raceFrame.setVisible(true);
         startAllTimers();
     }
 
     @Override
     protected JPanel setResultsPanelLocation(JPanel rp){
-        rp.setLocation(0, raceHeight+150);
+        rp.setLocation(0, raceHeight+100);
         return rp;
     }
 }

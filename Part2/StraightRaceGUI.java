@@ -35,7 +35,7 @@ public class StraightRaceGUI extends RaceGUI{
             racePanel.add(newHorseLane,gbc);
 
             gbc.gridx = 1;
-            racePanel.add(new JLabel(theHorse.getName()+" (Current confidence "+theHorse.getConfidence()+")"),gbc);
+            racePanel.add(createHorseLabel(theHorse),gbc);
             lanes.add(newHorseLane);
         }
 

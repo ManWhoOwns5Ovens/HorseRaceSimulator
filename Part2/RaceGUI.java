@@ -39,8 +39,6 @@ abstract class RaceGUI {
         createRacePanel();
     }
 
-    protected void createRacePanel(){} //to be overriden
-
     protected void setupTimer(int index,boolean isSlowDown){
         LanePanel currentLane=lanes.get(index);
         int interval= currentLane.getHorse().getMovementInterval(race.getWeather());
@@ -108,7 +106,7 @@ abstract class RaceGUI {
     protected JPanel createResultsPanel(String displayMessage){
         JPanel resultsPanel= new JPanel();
         resultsPanel.setLayout(new GridBagLayout());
-        resultsPanel.setSize(raceWidth+200, 100);
+        resultsPanel.setSize(raceWidth+100, 100);
 
         resultsPanel=setResultsPanelLocation(resultsPanel);
         
@@ -138,7 +136,6 @@ abstract class RaceGUI {
         return resultsPanel;
     }
 
-    abstract JPanel setResultsPanelLocation(JPanel rp);
 
     protected JLabel createResultsFinalMessage(String displayMessage){
         JLabel messageLabel=new JLabel(displayMessage);
@@ -189,6 +186,24 @@ abstract class RaceGUI {
             displayMessage="All horses have fallen! Race can no longer continue";
         }
         return displayMessage;
+    }
+
+    protected  JLabel createHorseLabel(Horse theHorse){
+        JLabel horseLabel=new JLabel(theHorse.getName()+" (Current confidence "+theHorse.getConfidence()+")");
+        horseLabel.setForeground(theHorse.getCoatColor());
+        return horseLabel;
+    }
+
+    abstract void createRacePanel();
+
+    abstract JPanel setResultsPanelLocation(JPanel rp);
+
+    protected JPanel createHorseLabelPanel(ArrayList<Horse> horses){
+        JPanel horseLabelPanel= new JPanel();
+        horseLabelPanel.setLayout(new GridLayout(horses.size(), 1, 0,(raceHeight-horses.size()*15)/horses.size()));
+        horseLabelPanel.setLocation(raceWidth+50, 50);
+        horseLabelPanel.setSize(300, raceHeight);
+        return horseLabelPanel;
     }
 
 }
