@@ -1,3 +1,3 @@
 public enum LaneType{
-    STRAIGHT, OVAL, EIGHT;
+    STRAIGHT, OVAL, EIGHT, ZIGZAG;
 }

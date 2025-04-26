@@ -87,22 +87,6 @@ import java.awt.*;
         Math.cos(angle);
 
         return (int)(25*offset+diameter+ (diameter -10) *xPos);
-
-        /*if(progress<0.25){
-            double angle=(progress/0.25)*Math.PI;
-            return (int)(25*offset+radius+circleDistance
-             + radius*Math.cos(angle));
-        }
-        else if(progress<0.75){
-            double angle=((progress-0.25)/0.5) * 2 *Math.PI;
-            return (int)(25*offset+radius
-             + radius*Math.cos(angle));
-        }
-        else{
-            double angle=((progress-0.75) / 0.25)*Math.PI + Math.PI;
-            return (int)(25*offset+radius+circleDistance
-             + radius*Math.cos(angle));
-        }*/
     }
 
     private int getHorseY(){
@@ -113,20 +97,6 @@ import java.awt.*;
         Math.sin(2 * angle) / 2;
 
         return (int)(25* offset+ radius+ (diameter+20)* yPos);
-
-
-        /*if(progress<0.25){
-            angle=(progress/0.25)*Math.PI;
-        }
-        else if(progress<0.75){
-            angle=((progress-0.25)/0.5) * 2 *Math.PI;
-        }
-        else{
-            angle=((progress-0.75) / 0.25)*Math.PI + Math.PI;   
-        }
-
-        return (int)(25*offset+radius
-             + radius*Math.sin(angle));*/
     }
 
 

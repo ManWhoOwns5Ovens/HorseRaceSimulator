@@ -159,7 +159,7 @@ public class RaceSettingsGUI {
     
     //Race Settings
     private JPanel createRaceSettingsPanel() {
-        JSpinner raceLengthSpinner = createSpinner(10,40);
+        JSpinner raceLengthSpinner = createSpinner(10,30);
 
         lanesCountSpinner = createSpinner(horsePanels.size(),12);//horse config created before track settings hence allowing for direct use of horse panels size
         
@@ -231,6 +231,9 @@ public class RaceSettingsGUI {
                 break;
             case LaneType.EIGHT:
                 gui=new EightRaceGUI(race);
+                break;
+            case LaneType.ZIGZAG:
+                gui= new ZigzagRaceGUI(race);
                 break;
         }
 
