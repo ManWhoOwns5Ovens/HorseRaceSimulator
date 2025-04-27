@@ -33,7 +33,7 @@ public class Race
     }
 
     private void setLaneCount(int newLaneCount){
-        if(newLaneCount<3){
+        if(newLaneCount<3 || newLaneCount>12){
             this.laneCount=3;
         }
         else{
@@ -319,7 +319,7 @@ public class Race
         final int MINIMUM_LENGTH=3; //min. length of race
         final int DEFAULT_LENGTH=10; //ideal and recommended race length
 
-        if(raceLength<MINIMUM_LENGTH){
+        if(raceLength<MINIMUM_LENGTH || raceLength>50){
             this.raceLength=DEFAULT_LENGTH;
         }
         else{
