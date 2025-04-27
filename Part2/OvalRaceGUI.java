@@ -48,6 +48,7 @@ public class OvalRaceGUI extends RaceGUI{
         weatherLabel.setFont(new Font("SansSerif", Font.PLAIN, 15));
         weatherLabel.setSize(raceWidth+150, 25);
         weatherLabel.setLocation(25,25);
+        weatherLabel.setForeground(race.getWeather().getColor());
         
         racePanel.add(weatherLabel);
         raceFrame.add(racePanel);

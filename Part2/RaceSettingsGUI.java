@@ -56,11 +56,11 @@ public class RaceSettingsGUI {
         gbc.ipady=10;
         gbc.gridwidth=2;
 
-        int limit = 3;
+        int horseLimit = 3;
 
-        if(!horses.isEmpty()){limit=horses.size();}
+        if(!horses.isEmpty()){horseLimit=horses.size();}
 
-        for (int i=0; i<limit; i++){
+        for (int i=0; i<horseLimit; i++){
             HorseConfigPanel hcp=new HorseConfigPanel();
             if(!horses.isEmpty()){
                 hcp=new HorseConfigPanel(horses.get(i));

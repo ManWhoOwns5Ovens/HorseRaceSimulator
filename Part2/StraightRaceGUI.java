@@ -54,6 +54,7 @@ public class StraightRaceGUI extends RaceGUI{
         gbc.gridy = laneCount;
         gbc.gridwidth = 2;
         JLabel weatherLabel = new JLabel("Weather: " + race.getWeather().toString());
+        weatherLabel.setForeground(race.getWeather().getColor());
         racePanel.add(weatherLabel, gbc);
 
         raceFrame.add(racePanel);

@@ -46,6 +46,7 @@ public class ZigzagRaceGUI extends RaceGUI{
 
 
         JLabel weatherLabel = new JLabel("Weather: " + race.getWeather().toString());
+        weatherLabel.setForeground(race.getWeather().getColor());
         racePanel.add(weatherLabel);
 
         raceFrame.add(racePanel);
