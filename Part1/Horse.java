@@ -1,6 +1,7 @@
 
 /**
- * Write a description of class Horse here.
+ * Class that represents a horse in the simulator. Each attribute/stat impacts how the horse looks, behaves and performs in the simulator.
+ * This class is the core data model for each horse competitor in the race.
  * 
  * @author David Valsan
  * @version 1.1
